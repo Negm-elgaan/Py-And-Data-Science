@@ -275,3 +275,282 @@ attrition_clust_prep['RelationshipSatisfaction'] = attrition_clust_prep['Relatio
 
 # Perform cluster sampling on the selected group, getting 0.25 of attrition_pop
 attrition_clust = attrition_clust_prep.groupby('RelationshipSatisfaction').sample(len(attrition_pop) // 4 , random_state = 2022)
+
+############################
+# Mean Attrition by RelationshipSatisfaction group
+mean_attrition_pop = attrition_pop.groupby('RelationshipSatisfaction')['Attrition'].mean()
+
+# Print the result
+print(mean_attrition_pop)
+###############################
+# Calculate the same thing for the simple random sample 
+mean_attrition_srs = attrition_srs.groupby('RelationshipSatisfaction')['Attrition'].mean()
+
+# Print the result
+print(mean_attrition_srs)
+################################
+# Calculate the same thing for the stratified sample 
+mean_attrition_strat = attrition_strat.groupby('RelationshipSatisfaction')['Attrition'].mean()
+
+# Print the result
+print(mean_attrition_strat)
+###############################
+# Calculate the same thing for the cluster sample 
+mean_attrition_clust = attrition_clust.groupby('RelationshipSatisfaction')['Attrition'].mean()
+
+
+# Print the result
+print(mean_attrition_clust)
+######################
+# Generate a simple random sample of 50 rows, with seed 2022
+attrition_srs50 = attrition_pop.sample(n = 50 , random_state = 2022)
+
+# Calculate the mean employee attrition in the sample
+mean_attrition_srs50 = attrition_srs50['Attrition'].mean()
+
+# Calculate the relative error percentage
+rel_error_pct50 = 100 * abs(mean_attrition_srs50 - attrition_pop['Attrition'].mean()) / mean_attrition_pop 
+
+# Print rel_error_pct50
+print(rel_error_pct50)
+##########################
+# Generate a simple random sample of 50 rows, with seed 2022
+attrition_srs100 = attrition_pop.sample(n = 100 , random_state = 2022)
+
+# Calculate the mean employee attrition in the sample
+mean_attrition_srs100 = attrition_srs100['Attrition'].mean()
+
+# Calculate the relative error percentage
+rel_error_pct100 = 100 * abs(mean_attrition_srs100 - attrition_pop['Attrition'].mean()) / mean_attrition_pop 
+
+# Print rel_error_pct50
+print(rel_error_pct100)
+#############################
+# Create an empty list
+mean_attritions = []
+# Loop 500 times to create 500 sample means
+for i in range(0,500):
+	mean_attritions.append(
+    	attrition_pop.sample(n=60)['Attrition'].mean()
+	)
+  
+# Print out the first few entries of the list
+print(mean_attritions[0:5])
+##############################
+# Create an empty list
+mean_attritions = []
+# Loop 500 times to create 500 sample means
+for i in range(500):
+	mean_attritions.append(
+    	attrition_pop.sample(n=60)['Attrition'].mean()
+	)
+
+# Create a histogram of the 500 sample means
+plt.hist(x = mean_attritions , bins = 16)
+plt.show()
+##############################
+# Expand a grid representing five 8-sided dice
+dice = expand_grid(
+  {'die1' : [1,2,3,4,5,6,7,8], 
+   'die2' : [1,2,3,4,5,6,7,8],
+   'die3' : [1,2,3,4,5,6,7,8],
+   'die4' : [1,2,3,4,5,6,7,8],
+   'die5' : [1,2,3,4,5,6,7,8],
+  })
+
+# Print the result
+print(dice)
+###############################
+# Expand a grid representing five 8-sided dice
+dice = expand_grid(
+  {'die1': [1, 2, 3, 4, 5, 6, 7, 8],
+   'die2': [1, 2, 3, 4, 5, 6, 7, 8],
+   'die3': [1, 2, 3, 4, 5, 6, 7, 8],
+   'die4': [1, 2, 3, 4, 5, 6, 7, 8],
+   'die5': [1, 2, 3, 4, 5, 6, 7, 8]
+  })
+
+# Add a column of mean rolls and convert to a categorical
+dice['mean_roll'] = (dice['die1'] + dice['die2'] + dice['die3'] + dice['die4'] + dice['die5'] )/ 5
+                     
+                    
+dice['mean_roll'] = dice['mean_roll'].astype('category')
+
+# Print result
+print(dice)
+##################################
+# Expand a grid representing five 8-sided dice
+dice = expand_grid(
+  {'die1': [1, 2, 3, 4, 5, 6, 7, 8],
+   'die2': [1, 2, 3, 4, 5, 6, 7, 8],
+   'die3': [1, 2, 3, 4, 5, 6, 7, 8],
+   'die4': [1, 2, 3, 4, 5, 6, 7, 8],
+   'die5': [1, 2, 3, 4, 5, 6, 7, 8]
+  })
+
+# Add a column of mean rolls and convert to a categorical
+dice['mean_roll'] = (dice['die1'] + dice['die2'] + 
+                     dice['die3'] + dice['die4'] + 
+                     dice['die5']) / 5
+dice['mean_roll'] = dice['mean_roll'].astype('category')
+
+# Draw a bar plot of mean_roll
+dice['mean_roll'].value_counts(sort = False).plot(kind = 'bar')
+plt.show()
+###############################
+# Sample one to eight, five times, with replacement
+five_rolls = np.random.choice(list(range(1,9)) , size = 5 , replace = True)
+
+# Print the mean of five_rolls
+print(five_rolls.mean())
+################################
+# Replicate the sampling code 1000 times
+sample_means_1000 = []
+for i in range(1000):
+    
+  		
+    sample_means_1000.append(np.random.choice(list(range(1, 9)), size=5, replace=True).mean())
+    
+# Print the first 10 entries of the result
+print(sample_means_1000[0:10])
+#########################
+# Replicate the sampling code 1000 times
+sample_means_1000 = []
+for i in range(1000):
+    sample_means_1000.append(
+  		np.random.choice(list(range(1, 9)), size=5, replace=True).mean()
+    )
+
+# Draw a histogram of sample_means_1000 with 20 bins
+plt.hist(bins = 20 , x = sample_means_1000)
+plt.show()
+############################
+# Calculate the mean of the mean attritions for each sampling distribution
+mean_of_means_5 = np.mean(sampling_distribution_5)
+mean_of_means_50 = np.mean(sampling_distribution_50)
+mean_of_means_500 = np.mean(sampling_distribution_500)
+
+# Print the results
+print(mean_of_means_5)
+print(mean_of_means_50)
+print(mean_of_means_500)
+############################
+# Calculate the std. dev. of the mean attritions for each sampling distribution
+sd_of_means_5 = np.std(sampling_distribution_5 , ddof = 1)
+sd_of_means_50 = np.std(sampling_distribution_50 , ddof = 1)
+sd_of_means_500 = np.std(sampling_distribution_500 , ddof = 1)
+
+# Print the results
+print(sd_of_means_5)
+print(sd_of_means_50)
+print(sd_of_means_500)
+####################
+# Generate 1 bootstrap resample
+spotify_1_resample = spotify_sample.sample(replace = True , frac = 1)
+
+# Print the resample
+print(spotify_1_resample)
+########################
+# Generate 1 bootstrap resample
+spotify_1_resample = spotify_sample.sample(frac=1, replace=True)
+
+# Calculate of the danceability column of spotify_1_resample
+mean_danceability_1 = np.mean(spotify_1_resample['danceability'])
+
+# Print the result
+print(mean_danceability_1)
+##########################
+# Replicate this 1000 times
+mean_danceability_1000 = []
+for i in range(1000):
+	mean_danceability_1000.append(
+        np.mean(spotify_sample.sample(frac=1, replace=True)['danceability'])
+	)
+  
+# Print the result
+print(mean_danceability_1000)
+##############################
+# Replicate this 1000 times
+mean_danceability_1000 = []
+for i in range(1000):
+	mean_danceability_1000.append(
+        np.mean(spotify_sample.sample(frac=1, replace=True)['danceability'])
+	)
+
+# Draw a histogram of the resample means
+plt.hist(mean_danceability_1000)
+plt.show()
+##################################
+mean_popularity_2000_samp = []
+
+# Generate a sampling distribution of 2000 replicates
+for i in range(2000):
+    mean_popularity_2000_samp.append(
+    	# Sample 500 rows and calculate the mean popularity 
+    	spotify_population['popularity'].sample(n = 500).mean()
+    )
+
+# Print the sampling distribution results
+print(mean_popularity_2000_samp)
+#########################
+mean_popularity_2000_boot = []
+
+# Generate a sampling distribution of 2000 replicates
+for i in range(2000):
+    mean_popularity_2000_boot.append(
+    	# Sample 500 rows and calculate the mean popularity 
+    	spotify_sample['popularity'].sample(n = 500 , replace = True).mean()
+    )
+
+# Print the sampling distribution results
+print(mean_popularity_2000_boot)
+#############################
+# Calculate the population mean popularity
+pop_mean = spotify_population['popularity'].mean()
+
+# Calculate the original sample mean popularity
+samp_mean = spotify_sample['popularity'].mean()
+
+# Calculate the sampling dist'n estimate of mean popularity
+samp_distn_mean = np.mean(sampling_distribution)
+
+# Calculate the bootstrap dist'n estimate of mean popularity
+boot_distn_mean = np.mean(bootstrap_distribution)
+
+# Print the means
+print([pop_mean, samp_mean, samp_distn_mean, boot_distn_mean])
+###########################
+# Calculate the population std dev popularity
+pop_sd = spotify_population['popularity'].std(ddof=0)
+
+# Calculate the original sample std dev popularity
+samp_sd = spotify_sample['popularity'].std(ddof = 1)
+
+# Calculate the sampling dist'n estimate of std dev popularity
+samp_distn_sd = np.std(sampling_distribution , ddof = 1) * np.sqrt(5000)
+
+# Calculate the bootstrap dist'n estimate of std dev popularity
+boot_distn_sd = np.std(bootstrap_distribution , ddof = 1) * np.sqrt(5000)
+
+# Print the standard deviations
+print([pop_sd, samp_sd, samp_distn_sd, boot_distn_sd])
+#################################
+# Generate a 95% confidence interval using the quantile method
+lower_quant = np.quantile(bootstrap_distribution,0.025)
+upper_quant = np.quantile(bootstrap_distribution,0.975)
+
+# Print quantile method confidence interval
+print((lower_quant, upper_quant))
+######################################
+# Find the mean and std dev of the bootstrap distribution
+point_estimate = np.mean(bootstrap_distribution)
+standard_error = np.std(bootstrap_distribution , ddof = 1)
+
+# Find the lower limit of the confidence interval
+lower_se = norm.ppf(0.025 , loc = point_estimate , scale = standard_error)
+
+# Find the upper limit of the confidence interval
+upper_se = norm.ppf(0.975 , loc = point_estimate , scale = standard_error)
+
+# Print standard error method confidence interval
+print((lower_se, upper_se))

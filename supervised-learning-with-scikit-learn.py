@@ -63,4 +63,17 @@ X = X.reshape(-1,1)
 
 # Check the shape of the features and targets
 print(X.shape,y.shape)
+#######################
+# Import matplotlib.pyplot
+import matplotlib.pyplot as plt
 
+# Create scatter plot
+plt.scatter(y = y , x = X , color= "blue")
+
+# Create line plot
+plt.plot(X , predictiaons , color = "red")
+plt.xlabel("Radio Expenditure ($)")
+plt.ylabel("Sales ($)")
+
+# Display the plot
+plt.show()

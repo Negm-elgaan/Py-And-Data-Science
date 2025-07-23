@@ -167,3 +167,156 @@ for clf_name, clf in classifiers:
     # Evaluate clf's accuracy on the test set
     print('{:s} : {:.3f}'.format(clf_name, accuracy))
 #################
+# Import VotingClassifier from sklearn.ensemble
+from sklearn.ensemble import VotingClassifier
+
+# Instantiate a VotingClassifier vc
+vc = VotingClassifier(estimators=classifiers)     
+
+# Fit vc to the training set
+vc.fit(X_train , y_train)   
+
+# Evaluate the test set predictions
+y_pred = vc.predict(X_test)
+
+# Calculate accuracy score
+accuracy = accuracy_score(y_test , y_pred)
+print('Voting Classifier: {:.3f}'.format(accuracy))
+################################
+# Import DecisionTreeClassifier
+from sklearn.tree import DecisionTreeClassifier as DTC
+
+# Import BaggingClassifier
+from sklearn.ensemble import BaggingClassifier as BC
+
+# Instantiate dt
+dt = DTC(random_state=1)
+
+# Instantiate bc
+bc = BC(base_estimator = dt , n_estimators = 50, random_state=1)
+###################
+# Fit bc to the training set
+bc.fit(X_train,y_train)
+
+# Predict test set labels
+y_pred = bc.predict(X_test)
+
+# Evaluate acc_test
+acc_test = accuracy_score(y_test , y_pred)
+print('Test set accuracy of bc: {:.2f}'.format(acc_test))
+##############
+# Import DecisionTreeClassifier
+from sklearn.tree import DecisionTreeClassifier as DTC
+
+# Import BaggingClassifier
+from sklearn.ensemble import BaggingClassifier as BC
+
+# Instantiate dt
+dt = DTC(min_samples_leaf = 8, random_state=1)
+
+# Instantiate bc
+bc = BC(base_estimator = dt, 
+            n_estimators = 50,
+            oob_score = True,
+            random_state=1)
+###############################
+# Fit bc to the training set 
+bc.fit(X_train , y_train)
+
+# Predict test set labels
+y_pred = bc.predict(X_test)
+
+# Evaluate test set accuracy
+acc_test = accuracy_score(y_test , y_pred)
+
+# Evaluate OOB accuracy
+acc_oob = bc.oob_score_
+
+# Print acc_test and acc_oob
+print('Test set accuracy: {:.3f}, OOB accuracy: {:.3f}'.format(acc_test, acc_oob))
+######################################
+# Import RandomForestRegressor
+from sklearn.ensemble import RandomForestRegressor as RFR
+
+# Instantiate rf
+rf = RFR(n_estimators = 25 , random_state = 2)
+            
+# Fit rf to the training set    
+rf.fit(X_train , y_train)
+###########################
+# Import mean_squared_error as MSE
+from sklearn.metrics import mean_squared_error as MSE
+
+# Predict the test set labels
+y_pred = rf.predict(X_test)
+
+# Evaluate the test set RMSE
+rmse_test = MSE(y_test , y_pred) ** (1/2)
+
+# Print rmse_test
+print('Test set RMSE of rf: {:.2f}'.format(rmse_test))
+#################################
+# Create a pd.Series of features importances
+importances = pd.Series(data=rf.feature_importances_,
+                        index= X_train.columns)
+
+# Sort importances
+importances_sorted = importances.sort_values()
+
+# Draw a horizontal barplot of importances_sorted
+importances_sorted.plot(kind = 'barh', color = 'lightgreen')
+plt.title('Features Importances')
+plt.show()
+#####################
+# Import DecisionTreeClassifier
+from sklearn.tree import DecisionTreeClassifier
+
+# Import AdaBoostClassifier
+from sklearn.ensemble import AdaBoostClassifier as ABC
+
+# Instantiate dt
+dt = DecisionTreeClassifier(max_depth = 2, random_state=1)
+
+# Instantiate ada
+ada = ABC(base_estimator = dt , n_estimators = 180, random_state=1)
+#########################
+# Fit ada to the training set
+ada.fit(X_train , y_train)
+
+# Compute the probabilities of obtaining the positive class
+y_pred_proba = ada.predict_proba(X_test)[:,1]
+#################################
+# Import roc_auc_score
+from sklearn.metrics import roc_auc_score
+
+# Evaluate test-set roc_auc_score
+ada_roc_auc = roc_auc_score(y_test , y_pred_proba)
+
+# Print roc_auc_score
+print('ROC AUC score: {:.2f}'.format(ada_roc_auc))
+##########################
+# Import GradientBoostingRegressor
+from sklearn.ensemble import GradientBoostingRegressor as GBR
+
+# Instantiate gb
+gb =   GBR(n_estimators = 200, 
+            max_depth = 4,
+            random_state=2)
+########################
+# Fit gb to the training set
+gb.fit(X_train , y_train)
+
+# Predict test set labels
+y_pred = gb.predict(X_test)
+#############################
+# Import mean_squared_error as MSE
+from sklearn.metrics import mean_squared_error as MSE
+
+# Compute MSE
+mse_test = MSE(y_test , y_pred)
+
+# Compute RMSE
+rmse_test = mse_test ** (1/2)
+
+# Print RMSE
+print('Test set RMSE of gb: {:.3f}'.format(rmse_test))

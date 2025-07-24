@@ -14,3 +14,10 @@ print(zero_array)
 # Create an array of random floats which has six columns and three rows
 random_array = np.random.random((3,6))
 print(random_array)
+##############################
+# Create an array of integers from one to ten
+one_to_ten = np.arange(1,11)
+
+# Create your scatterplot
+plt.scatter(x =  one_to_ten , y = doubling_array)
+plt.show()

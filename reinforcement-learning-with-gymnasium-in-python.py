@@ -342,3 +342,56 @@ for episode in range(10000):
 avg_reward_per_learned_episode = np.mean(reward_per_learned_episode)
 print("Average reward per learned episode: ", reward_per_learned_episode)
 print("Average reward per random episode: ", avg_reward_per_learned_episode)
+############################
+def update_q_table(state, action, next_state, reward):
+  	# Calculate the expected Q-value for the next state
+    expected_q = np.mean(Q[next_state])
+    # Update the Q-value for the current state and action
+    Q[state, action] = (1 - alpha) * Q[state , action] + alpha * (reward + gamma * expected_q) 
+    
+Q = np.random.rand(5, 2)
+print("Old Q:\n", Q)
+alpha = 0.1
+gamma = 0.99
+
+# Update the Q-table
+update_q_table(state = 2 , action = 1 , next_state = 3 , reward = 5)
+print("Updated Q:\n", Q)
+#################################
+# Initialize the Q-table with random values
+Q = np.zeros((env.observation_space.n , env.action_space.n))
+for i_episode in range(num_episodes):
+    state, info = env.reset()    
+    done = False    
+    while not done: 
+        action = env.action_space.sample()               
+        next_state, reward, done, truncated, info = env.step(action)
+        # Update the Q-table
+        update_q_table(state , action , next_state , reward)
+        state = next_state
+# Derive policy from Q-table        
+policy = {state: np.argmax(Q[state]) for state in range(env.observation_space.n)}
+render_policy(policy)
+#########################
+Q = [np.random.rand(8,4), np.random.rand(8,4)] 
+def update_q_tables(state, action, reward, next_state):
+  	# Get the index of the table to update
+    i = np.random.randint(2)
+    # Update Q[i]
+    best_next_action = np.argmax(Q[i][state])
+    Q[i][state, action] = (1 - alpha) * Q[i][state , action] + alpha * (reward + gamma * q[1 - i][next_state , best_next_action])
+#############################
+Q = [np.zeros((num_states, num_actions))] * 2
+for episode in range(num_episodes):
+    state, info = env.reset()
+    terminated = False   
+    while not terminated:
+        action = np.random.choice(num_actions)
+        next_state, reward, terminated, truncated, info = env.step(action)
+        # Update the Q-tables
+        update_q_tables(state , action , reward , next_state)
+        state = next_state
+# Combine the learned Q-tables        
+Q = Q[0] + Q[1]
+policy = {state: np.argmax(Q[state]) for state in range(num_states)}
+render_policy(policy)

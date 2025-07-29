@@ -395,3 +395,93 @@ for episode in range(num_episodes):
 Q = Q[0] + Q[1]
 policy = {state: np.argmax(Q[state]) for state in range(num_states)}
 render_policy(policy)
+##################
+epsilon = 0.2
+env = gym.make('FrozenLake')
+q_table = np.random.rand(env.observation_space.n, env.action_space.n)
+
+def epsilon_greedy(state):
+    # Implement the condition to explore
+    if np.random.rand() < epsilon:
+      	# Choose a random action
+        action = env.action_space.sample()
+    else:
+      	# Choose the best action according to q_table
+        action = np.argmax(q_table[state , :])
+    return action
+##########################3
+rewards_eps_greedy = []
+for episode in range(total_episodes):
+    state, info = env.reset()
+    episode_reward = 0
+    for i in range(max_steps):
+      	# Select action with epsilon-greedy strategy
+        action = epsilon_greedy(state)
+        next_state, reward, terminated, truncated, info = env.step(action)
+        # Accumulate reward
+        episode_reward += reward      
+        update_q_table(state, action, reward, next_state)      
+        state = next_state
+    # Append the toal reward to the rewards list 
+    rewards_eps_greedy.append(episode_reward)
+print("Average reward per episode: ", np.mean(rewards_eps_greedy))
+#########################
+rewards_decay_eps_greedy = []
+for episode in range(total_episodes):
+    state, info = env.reset()
+    episode_reward = 0
+    for i in range(max_steps):
+      	# Implement the training loop
+        action = epsilon_greedy(state)
+        new_state, reward, terminated, truncated, info = env.step(action)
+        episode_reward += reward
+        update_q_table(state, action, reward, new_state)            
+        state = new_state
+        
+
+    rewards_decay_eps_greedy.append(episode_reward)
+    # Update epsilon
+    epsilon =  max(min_epsilon , epsilon * epsilon_decay)
+print("Average reward per episode: ", np.mean(rewards_decay_eps_greedy))
+################################
+def create_multi_armed_bandit(n_bandits):
+  	# Generate the true bandits probabilities
+    true_bandit_probs = np.random.rand(n_bandits) 
+    # Create arrays that store the count and value for each bandit
+    counts = np.zeros(n_bandits) 
+    values = np.zeros(n_bandits)  
+    # Create arrays that store the rewards and selected arms each episode
+    rewards = np.zeros(n_iterations)
+    selected_arms = np.zeros(n_iterations , dtype = int)
+    return true_bandit_probs, counts, values, rewards, selected_arms
+####################################
+# Create a 10-armed bandit
+true_bandit_probs, counts, values, rewards, selected_arms = create_multi_armed_bandit(10)
+
+for i in range(n_iterations): 
+  	# Select an arm
+    arm = epsilon_greedy()
+    # Compute the received reward
+    reward = np.random.rand() < true_bandit_probs[arm]
+    rewards[i] = reward
+    selected_arms[i] = arm
+    counts[arm] += 1
+    values[arm] += (reward - values[arm]) / counts[arm]
+    # Update epsilon
+    epsilon = max(min_epsilon , epsilon * epsilon_decay)
+########################
+# Initialize the selection percentages with zeros
+selections_percentage = np.zeros((n_iterations , n_bandits))
+for i in range(n_iterations):
+    selections_percentage[i, selected_arms[i]] = 1
+# Compute the cumulative selection percentages 
+selections_percentage = np.cumsum(selections_percentage, axis= 0) / np.arange(1, n_iterations + 1).reshape(-1, 1)
+for arm in range(n_bandits):
+  	# Plot the cumulative selection percentage for each arm
+    plt.plot(selections_percentage[:,arm] , label=f'Bandit #{arm+1}')
+plt.xlabel('Iteration Number')
+plt.ylabel('Percentage of Bandit Selections (%)')
+plt.legend()
+plt.show()
+for i, prob in enumerate(true_bandit_probs, 1):
+    print(f"Bandit #{i} -> {prob:.2f}")

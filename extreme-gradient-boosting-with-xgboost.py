@@ -39,3 +39,34 @@ y_pred_4 = dt_clf_4.predict(X_test)
 # Compute the accuracy of the predictions: accuracy
 accuracy = float(np.sum(y_pred_4==y_test))/y_test.shape[0]
 print("accuracy:", accuracy)
+###############################
+# Create arrays for the features and the target: X, y
+X, y = churn_data.iloc[:,:-1], churn_data.iloc[:,-1]
+
+# Create the DMatrix from X and y: churn_dmatrix
+churn_dmatrix = xgb.DMatrix(data = X , label = y)
+
+# Create the parameter dictionary: params
+params = {"objective":"reg:logistic", "max_depth":3}
+
+# Perform cross-validation: cv_results
+cv_results = xgb.cv(dtrain = churn_dmatrix , params =  params, 
+                  nfold = 3, num_boost_round = 5, 
+                  metrics = "error", as_pandas = True , seed=123)
+
+# Print cv_results
+print(cv_results)
+
+# Print the accuracy
+print(((1-cv_results["test-error-mean"]).iloc[-1]))
+#########################
+# Perform cross_validation: cv_results
+cv_results = xgb.cv(dtrain = churn_dmatrix , params = params, 
+                  nfold = 3 , num_boost_round = 5, 
+                  metrics = "auc", as_pandas=True, seed=123)
+
+# Print cv_results
+print(cv_results)
+
+# Print the AUC
+print((cv_results["test-auc-mean"]).iloc[-1])

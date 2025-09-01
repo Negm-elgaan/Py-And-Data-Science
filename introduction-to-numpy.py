@@ -55,3 +55,33 @@ reshaped_game = flattened_game.reshape(9,9)
 # Print sudoku_game and reshaped_game
 print(sudoku_game)
 print(reshaped_game)
+#############################
+# Create an array of zeros with three rows and two columns
+zero_array = np.zeros([3,2])
+
+# Print the data type of zero_array
+print(zero_array.dtype)
+################################
+# Create an array of zeros with three rows and two columns
+zero_array = np.zeros((3, 2))
+
+# Print the data type of zero_array
+print(zero_array.dtype)
+
+# Create a new array of int32 zeros with three rows and two columns
+zero_int_array = np.zeros([3,2] , dtype = 'int32')
+
+# Print the data type of zero_int_array
+print(zero_int_array.dtype)
+######################
+# Print the data type of sudoku_game
+print(sudoku_game.dtype)
+#################################
+# Print the data type of sudoku_game
+print(sudoku_game.dtype)
+
+# Change the data type of sudoku_game to int8
+small_sudoku_game = sudoku_game.astype('int8')
+
+# Print the data type of small_sudoku_game
+print(small_sudoku_game.dtype)

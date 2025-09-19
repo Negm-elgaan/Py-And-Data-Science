@@ -42,3 +42,14 @@ knn.fit(X_train , y_train)
 
 # Score the model on the test data
 print(knn.score(X_test,y_test))
+########################
+wine.var()
+#################################
+# Print out the variance of the Proline column
+print(wine['Proline'].var())
+
+# Apply the log normalization function to the Proline column
+wine['Proline_log'] = np.log(wine['Proline'])
+
+# Check the variance of the normalized Proline column
+print(wine['Proline_log'].var())

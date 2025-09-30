@@ -199,3 +199,58 @@ lr_mn.fit(X_train, y_train)
 
 print("Softmax training accuracy:", lr_mn.score(X_train, y_train))
 print("Softmax test accuracy    :", lr_mn.score(X_test, y_test))
+#########################################
+# Split the dataset and labels into training and test sets
+X_train, X_test, y_train, y_test = train_test_split(X, y, stratify=y, random_state=42)
+
+# Fit the k-nearest neighbors model to the training data
+knn.fit(X_train , y_train)
+
+# Score the model on the test data
+print(knn.score(X_test, y_test))
+########################################
+# Print training accuracies
+print("Softmax     training accuracy:", lr_mn.score(X_train, y_train))
+print("One-vs-rest training accuracy:", lr_ovr.score(X_train, y_train))
+
+# Create the binary classifier (class 1 vs. rest)
+lr_class_1 = LogisticRegression(C = 100 , multi_class = 'ovr')
+lr_class_1.fit(X_train, y_train==1)
+
+# Plot the binary classifier (class 1 vs. rest)
+plot_classifier(X_train, y_train==1,lr_class_1)
+###################
+# We'll use SVC instead of LinearSVC from now on
+from sklearn.svm import SVC
+
+# Create/plot the binary classifier (class 1 vs. rest)
+svm_class_1 = SVC()
+svm_class_1.fit(X_train , y_train == 1)
+plot_classifier(X_train , y_train==1 , svm_class_1)
+###########################
+# Train a linear SVM
+svm = SVC(kernel="linear")
+svm.fit(X,y)
+plot_classifier(X, y, svm, lims=(11,15,0,6))
+
+# Make a new data set keeping only the support vectors
+print("Number of original examples", len(X))
+print("Number of support vectors", len(svm.support_))
+X_small = X[svm.support_]
+y_small = y[svm.support_]
+
+# Train a new SVM using only the support vectors
+svm_small = SVC(kernel="linear")
+svm_small.fit(X_small , y_small)
+plot_classifier(X_small, y_small, svm_small, lims=(11,15,0,6))
+################################
+# Instantiate an RBF SVM
+svm = SVC()
+
+# Instantiate the GridSearchCV object and run the search
+parameters = {'gamma':[0.00001, 0.0001, 0.001, 0.01, 0.1]}
+searcher = GridSearchCV(svm, parameters)
+searcher.fit(X,y)
+
+# Report the best parameters
+print("Best CV params", searcher.best_params_)

@@ -58,3 +58,18 @@ print(rules)
 
 # Print the number of rules
 print(len(rules))
+####################################
+# Compute the support
+support = onehot.mean()
+
+# Print the support
+print(support)
+###########################
+# Add a jam+bread column to the DataFrame onehot
+onehot['jam+bread'] = np.logical_and(onehot['jam'], onehot['bread'])
+
+# Compute the support
+support = onehot.mean()
+
+# Print the support values
+print(support)

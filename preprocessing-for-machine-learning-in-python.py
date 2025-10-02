@@ -103,3 +103,48 @@ running_times_5k["mean"] = running_times_5k.loc[:,'run1':'run5'].mean(axis=1)
 
 # Take a look at the results
 print(running_times_5k.head())
+#############################
+# First, convert string column to date column
+volunteer["start_date_converted"] = pd.to_datetime(volunteer['start_date_date'])
+
+# Extract just the month from the converted column
+volunteer["start_date_month"] = volunteer['start_date_converted'].dt.month
+
+# Take a look at the converted and new month columns
+print(volunteer[['start_date_converted', 'start_date_month']].head())
+##################################
+# Write a pattern to extract numbers and decimals
+def return_mileage(length):
+    
+    # Search the text for matches
+    mile = re.search('\d+\.\d+', length)
+    
+    # If a value is returned, use group(0) to return the found value
+    if mile is not None:
+        return float(mile.group(0))
+        
+# Apply the function to the Length column and take a look at both columns
+hiking["Length_num"] = hiking['Length'].apply(return_mileage)
+print(hiking[["Length", "Length_num"]].head())
+##########################################
+from sklearn.feature_extraction.text import TfidfVectorizer as TFV
+# Take the title text
+title_text = volunteer["title"]
+
+# Create the vectorizer method
+tfidf_vec = TFV()
+
+# Transform the text into tf-idf vectors
+text_tfidf = tfidf_vec.fit_transform(title_text)
+###########################
+from sklearn.naive_bayes import GaussianNB as NBC
+# Split the dataset according to the class distribution of category_desc
+y = volunteer["category_desc"]
+X_train, X_test, y_train, y_test = train_test_split(text_tfidf.toarray(), y , stratify = y , random_state=42)
+
+# Fit the model to the training data
+nb = NBC()
+nb.fit(X_train , y_train)
+
+# Print out the model's accuracy
+print(nb.score(X_test , y_test))

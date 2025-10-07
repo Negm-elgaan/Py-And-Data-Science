@@ -148,3 +148,21 @@ nb.fit(X_train , y_train)
 
 # Print out the model's accuracy
 print(nb.score(X_test , y_test))
+##################################
+# Create a list of redundant column names to drop
+to_drop = ["locality", "region", "vol_requests", "created_date" ,  "category_desc"]
+
+# Drop those columns from the dataset
+volunteer_subset = volunteer.drop(to_drop, axis = 1)
+
+# Print out the head of volunteer_subset
+#print("title" in to_drop)
+print(volunteer_subset.head())
+#########################
+# Print out the column correlations of the wine dataset
+print(wine.corr())
+
+# Drop that column from the DataFrame
+wine = wine.drop('Flavanoids' , axis = 1)
+
+print(wine.head())

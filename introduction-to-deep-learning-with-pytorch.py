@@ -41,3 +41,30 @@ linear_layer = nn.Linear(
 output = linear_layer(input_tensor)
 
 print(output)
+#########################
+import torch
+import torch.nn as nn
+
+input_tensor = torch.Tensor([[2, 3, 6, 7, 9, 3, 2, 1]])
+
+# Create a container for stacking linear layers
+model = nn.Sequential(nn.Linear(8, 4),
+                nn.Linear(4, 1)
+                )
+
+output = model(input_tensor)
+print(output)
+##############################
+import torch.nn as nn
+
+model = nn.Sequential(nn.Linear(9, 4),
+                      nn.Linear(4, 2),
+                      nn.Linear(2, 1))
+
+total = 0
+
+# Calculate the number of parameters in the model
+for p in model.parameters():
+  total += p.numel()
+  
+print(f"The number of parameters in the model is {total}")

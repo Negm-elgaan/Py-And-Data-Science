@@ -51,3 +51,63 @@ billpred = matmul(features , params)
 # Compute and print the error
 error = bill - billpred 
 print(error.numpy())
+########################
+print(reduce_sum(wealth , axis = 1))
+print(reduce_sum(wealth , axis = 0))
+##################################
+# Reshape the grayscale image tensor into a vector
+gray_vector = reshape( gray_tensor , (784 , 1))
+
+# Reshape the color image tensor into a vector
+color_vector = reshape( color_tensor , (2352 , 1))
+########################################
+def compute_gradient(x0):
+  	# Define x as a variable with an initial value of x0
+	x = Variable(x0)
+	with GradientTape() as tape:
+		tape.watch(x)
+        # Define y using the multiply operation
+		y = multiply(x , x)
+    # Return the gradient of y with respect to x
+	return tape.gradient(y , x).numpy()
+
+# Compute and print gradients at x = -1, 1, and 0
+print(compute_gradient(-1.0))
+print(compute_gradient(1.0))
+print(compute_gradient(0.0))
+################################
+# Reshape model from a 1x3 to a 3x1 tensor
+model = reshape(model, (3 , 1))
+
+# Multiply letter by model
+output = matmul(letter, model)
+
+# Sum over output and print prediction using the numpy method
+prediction = reduce_sum(output)
+print(prediction.numpy())
+#####################
+# Import pandas under the alias pd
+import pandas as pd
+
+# Assign the path to a string variable named data_path
+data_path = 'kc_house_data.csv'
+
+# Load the dataset as a dataframe named housing
+housing = pd.read_csv(data_path)
+
+# Print the price column of housing
+print(housing['price'])
+############################
+# Import numpy and tensorflow with their standard aliases
+import numpy as np
+import tensorflow as tf
+
+# Use a numpy array to define price as a 32-bit float
+price = np.array(housing['price'], np.float32)
+
+# Define waterfront as a Boolean using cast
+waterfront = tf.cast(housing['waterfront'], tf.bool)
+
+# Print price and waterfront
+print(price)
+print(waterfront)

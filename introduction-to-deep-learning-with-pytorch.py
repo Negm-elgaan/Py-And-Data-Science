@@ -68,3 +68,17 @@ for p in model.parameters():
   total += p.numel()
   
 print(f"The number of parameters in the model is {total}")
+#####################
+input_tensor = torch.tensor([[2.4]])
+
+# Create a sigmoid function and apply it on input_tensor
+sigmoid = nn.Sigmoid()
+probability = sigmoid(input_tensor)
+print(probability)
+#############################
+input_tensor = torch.tensor([[1.0, -6.0, 2.5, -0.3, 1.2, 0.8]])
+
+# Create a softmax function and apply it on input_tensor
+softmax = nn.Softmax(dim = -1)
+probabilities = softmax(input_tensor)
+print(probabilities)

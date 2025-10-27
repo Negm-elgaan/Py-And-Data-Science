@@ -122,3 +122,80 @@ reg_dt.fit(X_train , y_train)
 # Evaluate the performance of the model on the test set
 y_pred = reg_dt.predict(X_test)
 print('MAE: {:.3f}'.format(mean_absolute_error(y_test, y_pred)))
+####################################
+# Predict the labels of the test set
+pred_lr = clf_lr.predict(X_test)
+pred_dt = clf_dt.predict(X_test)
+pred_knn = clf_knn.predict(X_test)
+###############################
+# Make the invidual predictions
+pred_lr = clf_lr.predict(X_test)
+pred_dt = clf_dt.predict(X_test)
+pred_knn = clf_knn.predict(X_test)
+
+# Evaluate the performance of each model
+score_lr = f1_score(y_test , pred_lr)
+score_dt = f1_score(y_test , pred_dt)
+score_knn = f1_score(y_test , pred_knn)
+
+# Print the scores
+print(score_lr)
+print(score_dt)
+print(score_knn)
+#################################
+from sklearn.ensemble import VotingClassifier as VC
+# Instantiate the individual models
+clf_knn = KNeighborsClassifier(n_neighbors = 5)
+clf_lr = LogisticRegression(class_weight = 'balanced')
+clf_dt = DecisionTreeClassifier(min_samples_leaf = 3 , min_samples_split = 9 , random_state = 500)
+
+# Create and fit the voting classifier
+clf_vote = VC(estimators =  [('knn' , clf_knn) , ('lr' , clf_lr) , ('dt' , clf_dt)])
+clf_vote.fit(X_train, y_train)
+###############################
+# Calculate the predictions using the voting classifier
+pred_vote = clf_vote.predict(X_test)
+
+# Calculate the F1-Score of the voting classifier
+score_vote = f1_score(y_test , pred_vote)
+print('F1-Score: {:.3f}'.format(score_vote))
+
+# Calculate the classification report
+report = classification_report(y_test , pred_vote)
+print(report)
+##############
+got.describe()
+got.shape
+####################
+from sklearn.ensemble import VotingRegressor as VR
+# Build the individual models
+clf_lr = LogisticRegression(class_weight='balanced')
+clf_dt = DecisionTreeClassifier(min_samples_leaf=3, min_samples_split=9, random_state=500)
+clf_svm = SVC(probability=True, class_weight='balanced', random_state=500)
+
+# List of (string, estimator) tuples
+estimators = [('lr' , clf_lr) , ("dt" , clf_dt) , ('svm' , clf_svm)]
+
+# Build and fit an averaging classifier
+clf_avg = VotingClassifier(estimators = estimators , voting = 'soft')
+clf_avg.fit(X_train, y_train)
+
+# Evaluate model performance
+acc_avg = accuracy_score(y_test,  clf_avg.predict(X_test))
+print('Accuracy: {:.2f}'.format(acc_avg))
+#################################
+# List of (string, estimator) tuples
+estimators = [('dt' , clf_dt) , ('lr' , clf_lr) , ('knn' , clf_knn)]
+
+# Build and fit a voting classifier
+clf_vote = VotingClassifier(estimators = estimators)
+clf_vote.fit(X_train, y_train)
+
+# Build and fit an averaging classifier
+clf_avg = VotingClassifier(estimators = estimators , voting = 'soft')
+clf_avg.fit(X_train, y_train)
+
+# Evaluate the performance of both models
+acc_vote = accuracy_score(y_test, clf_vote.predict(X_test))
+acc_avg = accuracy_score(y_test,  clf_avg.predict(X_test))
+print('Voting: {:.2f}, Averaging: {:.2f}'.format(acc_vote, acc_avg))

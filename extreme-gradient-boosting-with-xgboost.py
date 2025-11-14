@@ -133,3 +133,152 @@ print(cv_results)
 
 # Extract and print final boosting round metric
 print((cv_results["test-mae-mean"]).tail(1))
+######################################
+# Create the DMatrix: housing_dmatrix
+housing_dmatrix = xgb.DMatrix(data=X, label=y)
+
+reg_params = [1, 10, 100]
+
+# Create the initial parameter dictionary for varying l2 strength: params
+params = {"objective":"reg:squarederror","max_depth":3}
+
+# Create an empty list for storing rmses as a function of l2 complexity
+rmses_l2 = []
+
+# Iterate over reg_params
+for reg in reg_params:
+
+    # Update l2 strength
+    params["lambda"] = reg
+    
+    # Pass this updated param dictionary into cv
+    cv_results_rmse = xgb.cv(dtrain = housing_dmatrix , params = params, nfold=2, num_boost_round=5, metrics="rmse", as_pandas=True, seed=123)
+    
+    # Append best rmse (final round) to rmses_l2
+    rmses_l2.append(cv_results_rmse["test-rmse-mean"].tail(1).values[0])
+
+# Look at best rmse per l2 param
+print("Best rmse as a function of l2:")
+print(pd.DataFrame(list(zip(reg_params, rmses_l2)), columns=["l2", "rmse"]))
+################################
+# Create the DMatrix: housing_dmatrix
+housing_dmatrix = xgb.DMatrix(data=X, label=y)
+
+# Create the parameter dictionary: params
+params = {"objective":"reg:squarederror", "max_depth":2}
+
+# Train the model: xg_reg
+xg_reg = xgb.train(params=params, dtrain=housing_dmatrix, num_boost_round=10)
+
+# Plot the first tree
+xgb.plot_tree(xg_reg , num_trees = 0)
+plt.show()
+
+# Plot the fifth tree
+xgb.plot_tree(xg_reg , num_trees = 4)
+plt.show()
+
+# Plot the last tree sideways
+xgb.plot_tree(xg_reg , num_trees = 9 , rankdir = "LR")
+plt.show()
+############################
+# Create the DMatrix: housing_dmatrix
+housing_dmatrix = xgb.DMatrix(data = X , label = y)
+
+# Create the parameter dictionary: params
+params = {"objective" : "reg:squarederror" , "max_depth" : 4}
+
+# Train the model: xg_reg
+xg_reg = xgb.train(dtrain = housing_dmatrix , params = params , num_boost_round = 10)
+
+# Plot the feature importances
+xgb.plot_importance(xg_reg)
+plt.show()
+################
+# Create the DMatrix: housing_dmatrix
+housing_dmatrix = xgb.DMatrix(X,y)
+
+# Create the parameter dictionary for each tree: params 
+params = {"objective":"reg:squarederror", "max_depth":3}
+
+# Create list of number of boosting rounds
+num_rounds = [5, 10, 15]
+
+# Empty list to store final round rmse per XGBoost model
+final_rmse_per_round = []
+
+# Iterate over num_rounds and build one model per num_boost_round parameter
+for curr_num_rounds in num_rounds:
+
+    # Perform cross-validation: cv_results
+    cv_results = xgb.cv(dtrain = housing_dmatrix , params=params, nfold=3, num_boost_round=curr_num_rounds, metrics="rmse", as_pandas=True, seed=123)
+ # Append final round RMSE
+    final_rmse_per_round.append(cv_results["test-rmse-mean"].tail().values[-1])
+
+# Print the resultant DataFrame
+num_rounds_rmses = list(zip(num_rounds, final_rmse_per_round))
+print(pd.DataFrame(num_rounds_rmses,columns=["num_boosting_rounds","rmse"]))
+##########################
+# Create your housing DMatrix: housing_dmatrix
+housing_dmatrix = xgb.DMatrix(data=X, label=y)
+
+# Create the parameter dictionary for each tree: params
+params = {"objective":"reg:squarederror", "max_depth":4}
+
+# Perform cross-validation with early stopping: cv_results
+cv_results = xgb.cv(dtrain = housing_dmatrix , params = params , nfold = 3 , early_stopping_rounds = 10  , metrics = 'rmse' , num_boost_round = 50 , seed = 123 , as_pandas = True)
+
+# Print cv_results
+print(cv_results)
+##############################
+# Create your housing DMatrix: housing_dmatrix
+housing_dmatrix = xgb.DMatrix(data=X, label=y)
+
+# Create the parameter dictionary for each tree (boosting round)
+params = {"objective":"reg:squarederror", "max_depth":3}
+
+# Create list of eta values and empty list to store final round rmse per xgboost model
+eta_vals = [0.001 , 0.01 , 0.1]
+best_rmse = []
+
+# Systematically vary the eta 
+for curr_val in eta_vals:
+
+    params["eta"] = curr_val
+    
+    # Perform cross-validation: cv_results
+    cv_results = xgb.cv(dtrain = housing_dmatrix , params = params , nfold = 3 , num_boost_round = 10 , metrics = 'rmse' , seed = 123 , early_stopping_rounds = 5 , as_pandas = True)
+    
+    
+    
+    # Append the final round rmse to best_rmse
+    best_rmse.append(cv_results["test-rmse-mean"].tail().values[-1])
+
+# Print the resultant DataFrame
+print(pd.DataFrame(list(zip(eta_vals, best_rmse)), columns=["eta","best_rmse"]))
+#######################################
+# Create your housing DMatrix
+housing_dmatrix = xgb.DMatrix(data=X,label=y)
+
+# Create the parameter dictionary
+params = {"objective":"reg:squarederror"}
+
+# Create list of max_depth values
+max_depths = [2, 5 , 10 , 20]
+best_rmse = []
+
+# Systematically vary the max_depth
+for curr_val in max_depths:
+
+    params["max_depth"] = curr_val
+    
+    # Perform cross-validation
+    cv_results = xgb.cv(dtrain = housing_dmatrix , params = params , nfold = 2 , early_stopping_rounds = 5 , seed = 123 , metrics = 'rmse' , num_boost_round = 10 , as_pandas = True)
+    
+    
+    
+    # Append the final round rmse to best_rmse
+    best_rmse.append(cv_results["test-rmse-mean"].tail().values[-1])
+
+# Print the resultant DataFrame
+print(pd.DataFrame(list(zip(max_depths, best_rmse)),columns=["max_depth","best_rmse"]))

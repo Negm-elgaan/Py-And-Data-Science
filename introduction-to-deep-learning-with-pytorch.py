@@ -254,3 +254,192 @@ dataloader = DL(dataset , batch_size = 2 , shuffle = True)
 for batch_inputs, batch_labels in dataloader:
     print('batch_inputs:', batch_inputs)
     print('batch_labels:', batch_labels)
+######################################
+y_pred = np.array([3, 5.0, 2.5, 7.0])  
+y = np.array([3.0, 4.5, 2.0, 8.0])     
+
+# Calculate MSE using NumPy
+mse_numpy = np.mean((y_pred - y) ** 2)
+
+# Create the MSELoss function in PyTorch
+criterion = nn.MSELoss()
+
+# Calculate MSE using PyTorch
+mse_pytorch = criterion(torch.tensor(y_pred), torch.tensor(y))
+
+print("MSE (NumPy):", mse_numpy)
+print("MSE (PyTorch):", mse_pytorch)
+# Loop over the number of epochs and then the dataloader
+for i in range(num_epochs):
+  for data in dataloader:
+    # Set the gradients to zero
+    optimizer.zero_grad()
+##########################
+# Loop over the number of epochs and the dataloader
+for i in range(num_epochs):
+  for data in dataloader:
+    # Set the gradients to zero
+    optimizer.zero_grad()
+    # Run a forward pass
+    feature, target = data
+    prediction = model(feature)
+    # Compute the loss
+    loss = criterion(prediction , target)
+    # Compute the gradients
+    loss.backward()
+##############################
+# Loop over the number of epochs and the dataloader
+for i in range(num_epochs):
+  for data in dataloader:
+    # Set the gradients to zero
+    optimizer.zero_grad()
+    # Run a forward pass
+    feature, target = data
+    prediction = model(feature)    
+    # Compute the loss
+    loss = criterion(prediction, target)    
+    # Compute the gradients
+    loss.backward()
+    # Update the model's parameters
+    optimizer.step()
+show_results(model, dataloader)
+##############################
+# Create a ReLU function with PyTorch
+relu_pytorch = nn.ReLU()
+###########################
+# Try a first learning rate value
+lr0 = 0.001
+optimize_and_plot(lr=lr0)
+# Try a second learning rate value
+lr1 = 1
+optimize_and_plot(lr=lr1)
+###################
+# Try a third learning rate value
+lr2 = 0.088
+optimize_and_plot(lr=lr2)
+########################
+# Try a first value for momentum
+mom0 = 0.8999
+optimize_and_plot(momentum=mom0)
+##################################
+# Try a second value for momentum
+mom1 = 0.918
+optimize_and_plot(momentum=mom1)
+######################
+for name, param in model.named_parameters():
+  
+    # Check for first layer's weight
+    if name == '0.weight':
+   
+        # Freeze this weight
+        param.requires_grad = False
+        
+    # Check for second layer's weight
+    if name == '1.weight':
+      
+        # Freeze this weight
+        param.requires_grad = False
+##############################
+layer0 = nn.Linear(16, 32)
+layer1 = nn.Linear(32, 64)
+
+# Use uniform initialization for layer0 and layer1 weights
+nn.init.uniform_(layer0.weight)
+nn.init.uniform_(layer1.weight)
+
+model = nn.Sequential(layer0, layer1)
+###################################
+# Set the model to evaluation mode
+model.eval()
+validation_loss = 0.0
+
+with torch.no_grad():
+  
+  for features, labels in validationloader:
+    
+      outputs = model(features)
+      loss = criterion(outputs, labels)
+      
+      # Sum the current loss to the validation_loss variable
+      validation_loss += loss.item()
+########################
+# Set the model to evaluation mode
+model.eval()
+validation_loss = 0.0
+
+with torch.no_grad():
+  for features, labels in validationloader:
+      outputs = model(features)
+      loss = criterion(outputs, labels)
+      # Sum the current loss to the validation_loss variable
+      validation_loss += loss.item()
+      
+# Calculate the mean loss value
+validation_loss_epoch = validation_loss / len(validationloader)
+print(validation_loss_epoch)
+
+# Set the model back to training mode
+model.train()
+############################
+# Create accuracy metric
+metric = torchmetrics.Accuracy(task = "multiclass"  , num_classes = 3)
+for features, labels in dataloader:
+    outputs = model(features)
+  
+    # Calculate accuracy over the batch
+    metric.update(outputs , labels.argmax(dim = -1))
+#######################
+# Create accuracy metric
+metric = torchmetrics.Accuracy(task="multiclass", num_classes=3)
+for features, labels in dataloader:
+    outputs = model(features)
+    
+    # Calculate accuracy over the batch
+    metric.update(outputs, labels.argmax(dim=-1))
+    
+# Calculate accuracy over the whole epoch
+accuracy = metric.compute()
+print(f"Accuracy on all data: {accuracy}")
+
+# Reset metric for the next epoch
+metric.reset()
+plot_errors(model, dataloader)
+##############################
+# Model with Dropout
+model = nn.Sequential(
+    nn.Linear(8, 6),
+    nn.Linear(6, 4),
+    nn.Dropout(p = 0.5))
+
+# Forward pass in training mode (Dropout active)
+model.train()
+output_train = model(features)
+####################
+model = nn.Sequential(
+    nn.Linear(8, 6),
+    nn.Linear(6, 4),
+    nn.Dropout(p=0.5))
+
+model.train()
+output_train = model(features)
+
+# Forward pass in evaluation mode (Dropout disabled)
+model.eval()
+output_eval = model(features)
+
+# Print results
+print("Output in train mode:", output_train)
+print("Output in eval mode:", output_eval)
+##################################
+values = []
+for idx in range(10):
+    # Randomly sample a learning rate factor between 2 and 4
+    factor = np.random.uniform(2,4)
+    lr = 10 ** -factor
+    
+    # Randomly select a momentum between 0.85 and 0.99
+    momentum = np.random.uniform(0.85 , 0.99)
+    
+    values.append((lr, momentum))
+       
+plot_hyperparameter_search(values)

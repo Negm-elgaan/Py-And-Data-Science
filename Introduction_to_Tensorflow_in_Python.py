@@ -111,3 +111,55 @@ waterfront = tf.cast(housing['waterfront'], tf.bool)
 # Print price and waterfront
 print(price)
 print(waterfront)
+################################
+# Import the keras module from tensorflow
+from tensorflow import keras 
+
+# Compute the mean squared error (mse)
+loss = keras.losses.MSE(price, predictions)
+
+# Print the mean squared error (mse)
+print(loss.numpy())
+######################################
+# Import the keras module from tensorflow
+from tensorflow import keras
+
+# Compute the mean absolute error (mae)
+loss = keras.losses.mae(price, predictions)
+
+# Print the mean absolute error (mae)
+print(loss.numpy())
+################################################
+# Initialize a variable named scalar
+scalar = Variable(1.0, float32)
+
+# Define the model
+def model(scalar, features = features):
+  	return scalar * features
+
+# Define a loss function
+def loss_function(scalar = scalar , features = features, targets = targets):
+	# Compute the predicted values
+	predictions = model(scalar, features)
+    
+	# Return the mean absolute error loss
+	return keras.losses.mae(targets, predictions)
+
+# Evaluate the loss function and print the loss
+print(loss_function(scalar).numpy())
+###############################
+# Define a linear regression model
+def linear_regression(intercept, slope, features = size_log):
+	return slope * features + intercept
+
+# Set loss_function() to take the variables as arguments
+def loss_function(intercept , slope , features = size_log, targets = price_log):
+	# Set the predicted values
+	predictions = linear_regression(intercept, slope, features)
+    
+    # Return the mean squared error loss
+	return keras.losses.mse(targets , predictions)
+
+# Compute the loss for different slope and intercept values
+print(loss_function(0.1, 0.1).numpy())
+print(loss_function(0.1, 0.5).numpy())

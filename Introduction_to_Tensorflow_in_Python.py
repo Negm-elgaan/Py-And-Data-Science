@@ -163,3 +163,129 @@ def loss_function(intercept , slope , features = size_log, targets = price_log):
 # Compute the loss for different slope and intercept values
 print(loss_function(0.1, 0.1).numpy())
 print(loss_function(0.1, 0.5).numpy())
+#####################################
+# Initialize an Adam optimizer
+opt = keras.optimizers.Adam(0.5)
+
+for j in range(100):
+	# Apply minimize, pass the loss function, and supply the variables
+	opt.minimize(lambda: loss_function(intercept, slope), var_list = [intercept , slope])
+
+	# Print every 10th value of the loss
+	if j % 10 == 0:
+		print(loss_function(intercept, slope).numpy())
+
+# Plot data and regression line
+plot_results(intercept, slope)
+############################################
+# Define the linear regression model
+def linear_regression(params, feature1 = size_log, feature2 = bedrooms):
+	return params[0] + feature1 * params[1] + feature2 * params[2]
+
+# Define the loss function
+def loss_function(params , targets = price_log, feature1 = size_log, feature2 = bedrooms):
+	# Set the predicted values
+	predictions = linear_regression(params, feature1, feature2)
+  
+	# Use the mean absolute error loss
+	return keras.losses.MAE(targets, predictions)
+
+# Define the optimize operation
+opt = keras.optimizers.Adam()
+
+# Perform minimization and print trainable variables
+for j in range(10):
+	opt.minimize(lambda: loss_function(params), var_list=[params])
+	print_results(params)
+###################################
+# Define the intercept and slope
+intercept = Variable(10.0 , float32)
+slope = Variable(0.5, float32)
+
+# Define the model
+def linear_regression(intercept, slope, features):
+	# Define the predicted values
+	return slope * features + intercept
+
+# Define the loss function
+def loss_function(intercept , slope , targets , features):
+	# Define the predicted values
+	predictions = linear_regression(intercept , slope , features)
+    
+ 	# Define the MSE loss
+	return keras.losses.MSE(predictions , targets)
+#########################################
+# Initialize Adam optimizer
+opt = keras.optimizers.Adam()
+
+# Load data in batches
+for batch in pd.read_csv('kc_house_data.csv' , chunksize=100):
+	size_batch = np.array(batch['sqft_lot'], np.float32)
+
+	# Extract the price values for the current batch
+	price_batch = np.array(batch['price'], np.float32)
+
+	# Complete the loss, fill in the variable list, and minimize
+	opt.minimize(lambda: loss_function(intercept, slope, price_batch, size_batch), var_list=[intercept, slope])
+
+# Print trained parameters
+print(intercept.numpy(), slope.numpy())
+##################################
+# Initialize bias1
+bias1 = Variable(1.0)
+
+# Initialize weights1 as 3x2 variable of ones
+weights1 = Variable(ones((3, 2)))
+
+# Perform matrix multiplication of borrower_features and weights1
+product1 = matmul(borrower_features , weights1)
+
+# Apply sigmoid activation function to product1 + bias1
+dense1 = keras.activations.sigmoid(product1 + bias1)
+
+# Print shape of dense1
+print("\n dense1's output shape: {}".format(dense1.shape))
+################################
+# From previous step
+bias1 = Variable(1.0)
+weights1 = Variable(ones((3, 2)))
+product1 = matmul(borrower_features, weights1)
+dense1 = keras.activations.sigmoid(product1 + bias1)
+
+# Initialize bias2 and weights2
+bias2 = Variable(1.0)
+weights2 = Variable(ones((2, 1)))
+
+# Perform matrix multiplication of dense1 and weights2
+product2 = matmul(dense1 , weights2)
+
+# Apply activation to product2 + bias2 and print the prediction
+prediction = keras.activations.sigmoid(product2 + bias2)
+print('\n prediction: {}'.format(prediction.numpy()[0,0]))
+print('\n actual: 1')
+####################################
+ # Compute the product of borrower_features and weights1
+products1 = matmul(borrower_features , weights1)
+
+# Apply a sigmoid activation function to products1 + bias1
+dense1 = keras.activations.sigmoid(products1 + bias1)
+
+# Print the shapes of borrower_features, weights1, bias1, and dense1
+print('\n shape of borrower_features: ', borrower_features.shape)
+print('\n shape of weights1: ', weights1.shape)
+print('\n shape of bias1: ', bias1.shape)
+print('\n shape of dense1: ', dense1.shape)
+#########################################
+# Define the first dense layer
+dense1 = keras.layers.Dense(7 , activation = 'sigmoid')(borrower_features)
+
+# Define a dense layer with 3 output nodes
+dense2 = keras.layers.Dense(3 , activation = 'sigmoid')(dense1)
+
+# Define a dense layer with 1 output node
+predictions = keras.layers.Dense(1 , activation = 'sigmoid')(dense2)
+
+# Print the shapes of dense1, dense2, and predictions
+print('\n shape of dense1: ', dense1.shape)
+print('\n shape of dense2: ', dense2.shape)
+print('\n shape of predictions: ', predictions.shape)

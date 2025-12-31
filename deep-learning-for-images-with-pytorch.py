@@ -199,3 +199,51 @@ bb = nn.Sequential(
 	# Add the output for the last regression layer
 	nn.Linear(32, num_coordinates),
 )
+##########################
+###########################################
+# Import AnchorGenerator
+from torchvision.models.detection.rpn import AnchorGenerator
+
+# Configure anchor size
+anchor_sizes = ((32 , 64 , 128),)
+
+# Configure aspect ratio
+aspect_ratios = ((0.5 , 1.0 , 2.0),)
+
+# Instantiate AnchorGenerator
+rpn_anchor_generator = AnchorGenerator(anchor_sizes , aspect_ratios)
+###################################################
+# Import MultiScaleRoIAlign
+from torchvision.models.detection import FasterRCNN as FRCNN
+from torchvision.ops import MultiScaleRoIAlign
+
+# Instantiate RoI pooler
+roi_pooler = MultiScaleRoIAlign(
+	featmap_names = ["0"],
+	output_size = 7,
+	sampling_ratio = 2,
+)
+
+mobilenet = torchvision.models.mobilenet_v2(weights="DEFAULT")
+backbone = nn.Sequential(*list(mobilenet.features.children()))
+backbone.out_channels = 1280
+
+# Create Faster R-CNN model
+model = FRCNN(
+	backbone = backbone,
+	num_classes = backbone.out_channels,
+	anchor_generator = anchor_generator,
+	box_roi_pool = roi_pooler,
+)
+##############################
+# Implement the RPN classification loss function
+rpn_cls_criterion = nn.BCEWithLogitsLoss()
+
+# Implement the RPN regression loss function
+rpn_reg_criterion = nn.MSELoss()
+
+# Implement the R-CNN classification Loss function
+rcnn_cls_criterion = nn.CrossEntropyLoss()
+
+# Implement the R-CNN regression loss function
+rcnn_reg_criterion = nn.MSELoss()

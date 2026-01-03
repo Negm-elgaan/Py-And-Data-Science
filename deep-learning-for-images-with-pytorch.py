@@ -247,3 +247,34 @@ rcnn_cls_criterion = nn.CrossEntropyLoss()
 
 # Implement the R-CNN regression loss function
 rcnn_reg_criterion = nn.MSELoss()
+#################################
+# Load mask image
+mask = Image.open('annotations/Egyptian_Mau_123.png')
+
+# Transform mask to tensor
+transform = transforms.Compose([transforms.ToTensor()])
+mask_tensor = transform(mask)
+
+# Create binary mask
+binary_mask = torch.where(
+    mask_tensor == (1 / 255) , 
+    torch.tensor(1.0) ,
+    torch.tensor(0.0) ,
+)
+
+# Print unique mask values
+print(binary_mask.unique())
+#####################################################################################
+# Load image and transform to tensor
+image = Image.open("images/Egyptian_Mau_123.jpg")
+transform = transforms.Compose([transforms.ToTensor()])
+image_tensor = transform(image)
+
+# Segment object out of the image
+object_tensor = image_tensor * binary_mask
+
+# Convert segmented object to image and display
+to_pil_image = transforms.Compose([transforms.ToPILImage()])
+object_image = to_pil_image(object_tensor)
+plt.imshow(object_image)
+plt.show()

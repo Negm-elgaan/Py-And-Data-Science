@@ -278,3 +278,30 @@ to_pil_image = transforms.Compose([transforms.ToPILImage()])
 object_image = to_pil_image(object_tensor)
 plt.imshow(object_image)
 plt.show()
+#############################
+from torchvision.models.detection import maskrcnn_resnet50_fpn as      mrcnn_rn50_fpn
+# Load a pre-trained Mask R-CNN model
+model = maskrcnn_resnet50_fpn(pretrained = True)
+model.eval()
+
+# Load an image and convert to a tensor
+image = Image.open("two_cats.jpg")
+transform = transforms.Compose([transforms.ToTensor()])
+image_tensor = transform(image).unsqueeze(0)
+
+# Perform inference
+with torch.no_grad():
+    prediction = model(image_tensor)
+    print(prediction)
+########################################
+# Extract masks and labels from prediction
+masks = prediction[0]['masks']
+labels = prediction[0]['labels']
+
+# Plot image with two overlaid masks
+for i in range(2):
+    plt.imshow(image)
+    # Overlay the i-th mask on top of the image
+    plt.imshow(masks[i , 0], 'jet', alpha = 0.5)
+    plt.title(f"Object: {class_names[labels[i]]}")
+    plt.show()

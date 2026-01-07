@@ -199,3 +199,33 @@ clf_avg.fit(X_train, y_train)
 acc_vote = accuracy_score(y_test, clf_vote.predict(X_test))
 acc_avg = accuracy_score(y_test,  clf_avg.predict(X_test))
 print('Voting: {:.2f}, Averaging: {:.2f}'.format(acc_vote, acc_avg))
+#####################################
+# Build unrestricted decision tree
+clf = DecisionTreeClassifier(min_samples_leaf = 3 , min_samples_split = 9 , random_state = 500)
+clf.fit(X_train, y_train)
+
+# Predict the labels
+pred = clf.predict(X_test)
+
+# Print the confusion matrix
+cm = confusion_matrix(y_test, pred)
+print('Confusion matrix:\n', cm)
+
+# Print the F1 score
+score = f1_score(y_test, pred)
+print('F1-Score: {:.3f}'.format(score))
+###########################
+# Build restricted decision tree
+clf = DecisionTreeClassifier(max_depth = 4  , max_features = 2 , random_state=500)
+clf.fit(X_train, y_train)
+
+# Predict the labels
+pred = clf.predict(X_test)
+
+# Print the confusion matrix
+cm = confusion_matrix(y_test, pred)
+print('Confusion matrix:\n', cm)
+
+# Print the F1 score
+score = f1_score(y_test, pred)
+print('F1-Score: {:.3f}'.format(score))

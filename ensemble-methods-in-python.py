@@ -229,3 +229,55 @@ print('Confusion matrix:\n', cm)
 # Print the F1 score
 score = f1_score(y_test, pred)
 print('F1-Score: {:.3f}'.format(score))
+#################################
+# Take a sample with replacement
+X_train_sample = X_train.sample(replace = True , frac = 1.0 , random_state=42)
+y_train_sample = y_train.loc[X_train_sample.index]
+
+# Build a "weak" Decision Tree classifier
+clf = DecisionTreeClassifier(max_depth = 4 , random_state=500)
+
+# Fit the model to the training sample
+clf.fit(X_train_sample , y_train_sample)
+#############################################
+# Build the list of individual models
+clf_list = []
+for i in range(21):
+	weak_dt = build_decision_tree(X_train , y_train , random_state = i)
+	clf_list.append(weak_dt)
+
+# Predict on the test set
+pred = predict_voting(clf_list , X_test)
+
+# Print the F1 score
+print('F1 score: {:.3f}'.format(f1_score(y_test, pred)))
+####################################
+# Instantiate the base model
+clf_dt = DecisionTreeClassifier(max_depth = 4)
+
+# Build the Bagging classifier
+clf_bag = BaggingClassifier(clf_dt , n_estimators = 21 , random_state=500)
+
+# Fit the Bagging model to the training set
+clf_bag.fit(X_train, y_train)
+
+# Predict the labels of the test set
+pred = clf_bag.predict(X_test)
+
+# Show the F1-score
+print('F1-Score: {:.3f}'.format(f1_score(y_test, pred)))
+##############################################
+# Build and train the bagging classifier
+clf_bag = BaggingClassifier(
+  clf_dt,
+  n_estimators = 21,
+  oob_score = True,
+  random_state=500)
+clf_bag.fit(X_train, y_train)
+
+# Print the out-of-bag score
+print('OOB-Score: {:.3f}'.format(clf_bag.oob_score_))
+
+# Evaluate the performance on the test set to compare
+pred = clf_bag.predict(X_test)
+print('Accuracy: {:.3f}'.format(accuracy_score(y_test, pred)))

@@ -305,3 +305,31 @@ for i in range(2):
     plt.imshow(masks[i , 0], 'jet', alpha = 0.5)
     plt.title(f"Object: {class_names[labels[i]]}")
     plt.show()
+###############################
+class Generator(nn.Module):
+  def __init__(self , in_dim , out_dim):
+    super(Generator,self).__init__()
+    self.generator = nn.Sequential(
+      gen_block(input_dim , 256) ,
+      gen_block(256 , 512) ,
+      gen_block(512 , 1024) , 
+      nn.Linear(1024 , out_dim) ,
+      nn.sigmoid(out_dim)
+    )
+  
+  def forward(x):
+    self.generator(x)
+ #########################
+class Discriminator(nn.Module):
+    def __init__(self , in_dim):
+        super(Discriminator , self).__init__()
+        self.disc = nn.Sequentia(
+            disc_block(in_dim , 1024) ,
+            disc_block(1024 , 512) , 
+            disc_block(512 , 256) ,
+            nn.Linear(256 , 1)
+        )
+    
+    def forward(x):
+        self.disc(x)
+        

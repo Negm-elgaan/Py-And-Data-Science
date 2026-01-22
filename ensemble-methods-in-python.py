@@ -281,3 +281,35 @@ print('OOB-Score: {:.3f}'.format(clf_bag.oob_score_))
 # Evaluate the performance on the test set to compare
 pred = clf_bag.predict(X_test)
 print('Accuracy: {:.3f}'.format(accuracy_score(y_test, pred)))
+##############
+uci_secom.describe()
+uci_secom['Pass/Fail'].value_counts()
+#######################
+# Build a balanced logistic regression
+clf_lr = LogisticRegression(class_weight = 'balanced' , solver = 'liblinear' , random_state = 42)
+
+# Build and fit a bagging classifier
+clf_bag = BaggingClassifier(base_estimator = clf_lr , max_features = 10 , oob_score = True , random_state=500)
+clf_bag.fit(X_train, y_train)
+
+# Evaluate the accuracy on the test set and show the out-of-bag score
+pred = clf_bag.predict(X_test)
+print('Accuracy:  {:.2f}'.format(accuracy_score(y_test, pred)))
+print('OOB-Score: {:.2f}'.format(clf_bag.oob_score_))
+
+# Print the confusion matrix
+print(confusion_matrix(y_test, pred))
+################################
+# Build a balanced logistic regression
+clf_base = LogisticRegression(class_weight='balanced', solver='liblinear', random_state=42)
+
+# Build and fit a bagging classifier with custom parameters
+clf_bag = BaggingClassifier(base_estimator = clf_base , max_features = 10, n_estimators = 20 , bootstrap = False , max_samples = 0.65 , random_state=500)
+clf_bag.fit(X_train, y_train)
+
+# Calculate predictions and evaluate the accuracy on the test set
+y_pred = clf_bag.predict(X_test)
+print('Accuracy:  {:.2f}'.format(accuracy_score(y_test, y_pred)))
+
+# Print the classification report
+print(classification_report(y_test, y_pred))

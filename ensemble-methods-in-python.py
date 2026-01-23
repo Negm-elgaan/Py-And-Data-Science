@@ -313,3 +313,67 @@ print('Accuracy:  {:.2f}'.format(accuracy_score(y_test, y_pred)))
 
 # Print the classification report
 print(classification_report(y_test, y_pred))
+##############
+movies.describe()
+################
+features.describe()
+features['runtime'].value_counts()
+features['runtime'].isna().sum()
+############################
+# Build and fit linear regression model
+reg_lm = LinearRegression()
+reg_lm.fit(X_train, y_train)
+
+# Calculate the predictions on the test set
+pred = reg_lm.predict(X_test)
+
+# Evaluate the performance using the RMSE
+rmse = np.sqrt(mean_squared_error(y_test , pred))
+print('RMSE: {:.3f}'.format(rmse))
+######################
+# Fit a linear regression model to the previous errors
+reg_error = LinearRegression()
+reg_error.fit(X_train_pop , y_train_error)
+
+# Calculate the predicted errors on the test set
+pred_error = reg_error.predict(X_test_pop)
+
+# Evaluate the updated performance
+rmse_error = np.sqrt(mean_squared_error(y_test_error , pred_error))
+print('RMSE: {:.3f}'.format(rmse_error))
+##########################################
+# Instantiate the default linear regression model
+reg_lm = LinearRegression()
+
+# Build and fit an AdaBoost regressor
+reg_ada = AdaBoostRegressor(base_estimator = reg_lm , n_estimators = 12 , random_state=500)
+reg_ada.fit(X_train, y_train)
+
+# Calculate the predictions on the test set
+pred = reg_ada.predict(X_test)
+
+# Evaluate the performance using the RMSE
+rmse = np.sqrt(mean_squared_error(y_test, pred))
+print('RMSE: {:.3f}'.format(rmse))
+#######################
+# Build and fit a tree-based AdaBoost regressor
+reg_ada = AdaBoostRegressor(n_estimators = 12 , random_state=500)
+reg_ada.fit(X_train, y_train)
+
+# Calculate the predictions on the test set
+pred = reg_ada.predict(X_test)
+
+# Evaluate the performance using the RMSE
+rmse = np.sqrt(mean_squared_error(y_test, pred))
+print('RMSE: {:.3f}'.format(rmse))
+########################################
+# Build and fit an AdaBoost regressor
+reg_ada = AdaBoostRegressor(n_estimators = 100 , learning_rate = 0.01 , random_state=500)
+reg_ada.fit(X_train, y_train)
+
+# Calculate the predictions on the test set
+pred = reg_ada.predict(X_test)
+
+# Evaluate the performance using the RMSE
+rmse = np.sqrt(mean_squared_error(y_test, pred))
+print('RMSE: {:.3f}'.format(rmse))

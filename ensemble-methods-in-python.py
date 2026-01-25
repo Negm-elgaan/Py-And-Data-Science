@@ -377,3 +377,52 @@ pred = reg_ada.predict(X_test)
 # Evaluate the performance using the RMSE
 rmse = np.sqrt(mean_squared_error(y_test, pred))
 print('RMSE: {:.3f}'.format(rmse))
+################################################
+reviews['Sentiment'].isna().sum()
+##################
+# Build and fit a Gradient Boosting classifier
+clf_gbm = GradientBoostingClassifier(n_estimators = 100 , learning_rate = 0.1 , random_state=500)
+clf_gbm.fit(X_train, y_train)
+
+# Calculate the predictions on the test set
+pred = clf_gbm.predict(X_test)
+
+# Evaluate the performance based on the accuracy
+acc = accuracy_score(y_test , pred)
+print('Accuracy: {:.3f}'.format(acc))
+
+# Get and show the Confusion Matrix
+cm = confusion_matrix(y_test , pred)
+print(cm)
+####################################
+import catboost as CB
+
+# Build and fit a CatBoost regressor
+reg_cat = CB.CatBoostRegressor(n_estimators = 100 , learning_rate = 0.1 , max_depth = 3 , random_state = 500)
+reg_cat.fit(X_train , y_train)
+
+# Calculate the predictions on the test set
+pred = reg_cat.predict(X_test)
+
+# Evaluate the performance using the RMSE
+rmse_cat = np.sqrt(mean_squared_error(y_test, pred))
+print('RMSE (CatBoost): {:.3f}'.format(rmse_cat))
+#######################################
+import xgboost as XGB
+import lightgbm as LGBM
+
+# Build and fit an XGBoost regressor
+reg_xgb = XGB.XGBRegressor(n_estimators = 100 , max_depth = 3 , objective ="reg:squarederror" , learning_rate = 0.1 , n_jobs = 2 , random_state = 500)
+reg_xgb.fit(X_train , y_train)
+
+# Build and fit a LightGBM regressor
+reg_lgb = LGBM.LGBMRegressor(max_depth = 3 , seed = 500 , objective = 'mean_squared_error' , learning_rate = 0.1 , n_estimators = 100)
+reg_lgb.fit(X_train , y_train)
+
+# Calculate the predictions and evaluate both regressors
+pred_xgb = reg_xgb.predict(X_test)
+rmse_xgb = np.sqrt(mean_squared_error(y_test, pred_xgb))
+pred_lgb = reg_lgb.predict(X_test)
+rmse_lgb = np.sqrt(mean_squared_error(y_test, pred_lgb))
+
+print('Extreme: {:.3f}, Light: {:.3f}'.format(rmse_xgb, rmse_lgb))

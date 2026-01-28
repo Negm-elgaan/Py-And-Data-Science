@@ -33,3 +33,39 @@ filtered_tokens = ['reached', 'support', 'got', 'helpful', 'response', 'within',
 clean_tokens = [word for word in filtered_tokens if word not in string.punctuation]
 
 print(clean_tokens)
+#########################
+review = "I have been FLYING a lot lately and the Flights just keep getting DELAYED. Honestly, traveling for WORK gets exhausting with endless delays, but every trip teaches you something new!"
+
+# Lowercase the review
+lower_text = review.lower()
+
+# Tokenize the lower_text into words
+tokens = word_tokenize(lower_text)
+
+# Remove stop words and punctuation
+clean_tokens = [word for word in tokens if word not in stop_words and word not in string.punctuation]
+
+print(clean_tokens)
+###############################
+from nltk.stem import PorterStemmer
+clean_tokens = ['flying', 'lot', 'lately', 'flights', 'keep', 'getting', 'delayed', 'honestly', 'traveling', 'work', 'gets', 'exhausting', 'endless', 'delays', 'every', 'travel', 'teaches', 'something', 'new']
+
+# Create stemmer
+stemmer = PorterStemmer()
+
+# Stem each token
+stemmed_tokens = [stemmer.stem(word) for word in clean_tokens]
+
+print(stemmed_tokens)
+######################################
+from nltk.stem import WordNetLemmatizer
+
+clean_tokens = ['flying', 'lot', 'lately', 'flights', 'keep', 'getting', 'delayed', 'honestly', 'traveling', 'work', 'gets', 'exhausting', 'endless', 'delays', 'every', 'travel', 'teaches', 'something', 'new']
+
+# Create lemmatizer
+lemmatizer = WordNetLemmatizer()
+
+# Lemmatize each token
+lemmatized_tokens = [lemmatizer.lemmatize(word) for word in clean_tokens]
+
+print(lemmatized_tokens)

@@ -467,3 +467,58 @@ model.compile(optimizer='RMSprop', loss='categorical_crossentropy', metrics=['ac
 
 # Add the number of epochs and the validation split
 model.fit(sign_language_features, sign_language_labels, epochs=10, validation_split=0.1)
+##############################
+# Define sequential model
+model = keras.Sequential()
+
+# Define the first layer
+model.add(keras.layers.Dense(1024 , activation = 'relu' , input_shape = (784,)))
+
+# Add activation function to classifier
+model.add(keras.layers.Dense(4, activation='softmax'))
+
+# Finish the model compilation
+model.compile(optimizer=keras.optimizers.Adam(lr=0.001), 
+              loss='categorical_crossentropy', metrics=['accuracy'])
+
+# Complete the model fit operation
+model.fit(sign_language_features, sign_language_labels, epochs=50, validation_split=0.5)
+################################
+# Evaluate the small model using the train data
+small_train = small_model.evaluate(train_features, train_labels)
+
+# Evaluate the small model using the test data
+small_test = small_model.evaluate(test_features , test_labels)
+
+# Evaluate the large model using the train data
+large_train = large_model.evaluate(train_features, train_labels)
+
+# Evaluate the large model using the test data
+large_test = large_model.evaluate(test_features , test_labels)
+
+# Print losses
+print('\n Small - Train: {}, Test: {}'.format(small_train, small_test))
+print('Large - Train: {}, Test: {}'.format(large_train, large_test))
+####################################
+# Define feature columns for bedrooms and bathrooms
+bedrooms = feature_column.numeric_column("bedrooms")
+bathrooms = feature_column.numeric_column('bathrooms')
+
+# Define the list of feature columns
+feature_list = [bedrooms , bathrooms]
+
+def input_fn():
+	# Define the labels
+	labels = np.array(housing['price'])
+	# Define the features
+	features = {'bedrooms':np.array(housing['bedrooms']), 
+                'bathrooms':np.array(housing['bathrooms'])}
+	return features, labels
+#################
+# Define the model and set the number of steps
+model = estimator.DNNRegressor(feature_columns = feature_list , hidden_units = [2 , 2])
+model.train(input_fn, steps=1)
+######################################
+# Define the model and set the number of steps
+model = estimator.LinearRegressor(feature_columns=feature_list)
+model.train(input_fn, steps=2)

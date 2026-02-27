@@ -29,3 +29,24 @@ for u , v , d in T.edges(data = True):
 
         # Set the weight to 1.1
         T.edges[u , v]['weight'] = 1.1
+###############################
+# Define find_selfloop_nodes()
+def find_selfloop_nodes(G):
+    """
+    Finds all nodes that have self-loops in the graph G.
+    """
+    nodes_in_selfloops = []
+
+    # Iterate over all the edges of G
+    for u, v in G.edges():
+
+    # Check if node u and node v are the same
+        if u == v:
+
+            # Append node u to nodes_in_selfloops
+            nodes_in_selfloops.append(u)
+
+    return nodes_in_selfloops
+
+# Check whether number of self loops equals the number of nodes in self loops
+assert nx.number_of_selfloops(T) == len(find_selfloop_nodes(T))

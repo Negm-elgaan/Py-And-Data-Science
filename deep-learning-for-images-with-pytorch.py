@@ -375,3 +375,55 @@ def forward(self, x):
     x = self.dec3(x)
 
     return self.out(x)
+
+#######################
+# Load model
+model = UNet()
+model.eval()
+# Load and transform image
+image = Image.open('car.jpg')
+transform = transforms.Compose([transforms.ToTensor()])
+image_tensor = transform(image).unsqueeze(0)
+
+# Predict segmentation mask
+with torch.no_grad():
+    prediction = model(image_tensor).squeeze(0)
+
+# Display mask
+plt.imshow(prediction[1, :, :])
+plt.show()
+########################
+# Instantiate the model
+model = UNet()
+
+# Produce semantic masks for the input image
+with torch.no_grad():
+    semantic_masks = model(image_tensor)
+
+# Choose highest-probability class for each pixel
+semantic_mask = torch.argmax(semantic_masks , dim = 1)
+
+# Display the mask
+plt.imshow(semantic_mask.squeeze(0))
+plt.axis("off")
+plt.show()
+########################################
+# Instantiate model and produce instance masks
+model = MaskRCNN()
+with torch.no_grad():
+    instance_masks = model(image_tensor)[0]["masks"]
+
+# Initialize panoptic mask as semantic_mask
+panoptic_mask = torch.clone(semantic_mask)
+
+# Iterate over instance masks
+instance_id = 3
+for mask in instance_masks:
+    # Set panoptic mask to instance_id where mask > 0.5
+    panoptic_mask[mask > 0.5] = instance_id
+    instance_id += 1
+    
+# Display panoptic mask
+plt.imshow(panoptic_mask.squeeze(0))
+plt.axis("off")
+plt.show()

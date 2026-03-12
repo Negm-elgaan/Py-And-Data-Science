@@ -309,3 +309,6 @@ impyrial.weight.convert_unit(100, from_unit='oz', to_unit='lb')  # returns 6.25
 ############################
 #include README.md
 #include LICENSE
+########################
+python setup.py sdist bdist_wheel
+ twine upload dist/*

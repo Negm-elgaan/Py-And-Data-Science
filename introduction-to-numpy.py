@@ -142,3 +142,14 @@ print(largest_tree_block_id)
 # Create an array which contains row data on all trees with largest_tree_block_id
 trees_on_largest_tree_block = tree_census[tree_census[:,1] == largest_tree_block_id]
 print(trees_on_largest_tree_block)
+##############################
+# Create the block_313879 array containing trees on block 313879
+block_313879 = tree_census[tree_census[:,1] == 313879]
+print(block_313879)
+#######################
+# Create an array of row_indices for trees on block 313879
+row_indices = np.where(tree_census[:,1] == 313879)
+
+# Create an array which only contains data for trees on block 313879
+block_313879 = tree_census[row_indices]
+print(block_313879)

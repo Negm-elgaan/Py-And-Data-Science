@@ -230,3 +230,19 @@ autoencoder.compile(optimizer = 'adadelta' , loss = 'binary_crossentropy' , metr
 
 # Summarize your model structure
 autoencoder.summary()
+####################################
+# Instantiate a Sequential model
+model = Sequential()
+
+# Add a hidden layer of 64 neurons and a 20 neuron's input
+model.add(Dense(64 , activation = 'relu' , input_shape =(20,)))
+
+# Add an output layer of 3 neurons with sigmoid activation
+model.add(Dense(3 , activation = 'sigmoid'))
+
+# Compile your model with binary crossentropy loss
+model.compile(optimizer='adam',
+           loss = 'binary_crossentropy',
+           metrics=['accuracy'])
+
+model.summary()

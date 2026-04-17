@@ -270,3 +270,57 @@ comic_con['cluster_labels'], distortion_list = vq(comic_con[['x_scaled', 'y_scal
 sns.scatterplot(x='x_scaled', y='y_scaled', 
                 hue='cluster_labels', data = comic_con)
 plt.show()
+###############################
+# Import the kmeans and vq functions
+from scipy.cluster.vq import kmeans , vq
+
+# Generate cluster centers
+cluster_centers, distortion = kmeans(mouse[['x_scaled' , 'y_scaled']] , 3)
+
+# Assign cluster labels
+mouse['cluster_labels'], distortion_list = vq(mouse[['x_scaled' , 'y_scaled']] , cluster_centers)
+
+# Plot clusters
+sns.scatterplot(x='x_scaled', y='y_scaled', 
+                hue='cluster_labels', data = mouse)
+plt.show()
+###################
+# Set up a random seed in numpy
+random.seed([1000,2000])
+#######################################
+# Set up a random seed in numpy
+random.seed([1000,2000])
+
+# Fit the data into a k-means algorithm
+cluster_centers,_ = kmeans(fifa[['scaled_def' , 'scaled_phy']],3)
+
+# Assign cluster labels
+fifa['cluster_labels'],_ = vq(fifa[['scaled_def' , 'scaled_phy']] , cluster_centers)
+##############################################
+# Set up a random seed in numpy
+random.seed([1000,2000])
+
+# Fit the data into a k-means algorithm
+cluster_centers,_ = kmeans(fifa[['scaled_def', 'scaled_phy']], 3)
+
+# Assign cluster labels
+fifa['cluster_labels'], _ = vq(fifa[['scaled_def', 'scaled_phy']], cluster_centers)
+
+# Display cluster centers 
+print(fifa[['scaled_def', 'scaled_phy', 'cluster_labels']].groupby('cluster_labels').agg('mean'))
+#############################################
+# Set up a random seed in numpy
+random.seed([1000,2000])
+
+# Fit the data into a k-means algorithm
+cluster_centers,_ = kmeans(fifa[['scaled_def', 'scaled_phy']], 3)
+
+# Assign cluster labels
+fifa['cluster_labels'], _ = vq(fifa[['scaled_def', 'scaled_phy']], cluster_centers)
+
+# Display cluster centers 
+print(fifa[['scaled_def', 'scaled_phy', 'cluster_labels']].groupby('cluster_labels').mean())
+
+# Create a scatter plot through seaborn
+sns.scatterplot(x='scaled_def', y='scaled_phy', hue='cluster_labels', data=fifa)
+plt.show()

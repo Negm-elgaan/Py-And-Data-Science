@@ -204,3 +204,46 @@ tree_census_clean = np.delete(tree_census_no_stumps , private_block_indices , ax
 
 # Print the shape of tree_census_clean
 print(tree_census_clean.shape)
+################################
+# Create a 2D array of total monthly sales across industries
+monthly_industry_sales = monthly_sales.sum(axis = 1 , keepdims = True)
+print(monthly_industry_sales)
+########################################
+# Create a 2D array of total monthly sales across industries
+monthly_industry_sales = monthly_sales.sum(axis=1, keepdims=True)
+print(monthly_industry_sales)
+
+# Add this column as the last column in monthly_sales
+monthly_sales_with_total = np.concatenate((monthly_sales , monthly_industry_sales) , axis = 1)
+print(monthly_sales_with_total)
+##############################################
+# Create the 1D array avg_monthly_sales
+avg_monthly_sales = monthly_sales.mean(axis = 1)
+print(avg_monthly_sales)
+##############################
+# Create the 1D array avg_monthly_sales
+avg_monthly_sales = monthly_sales.mean(axis=1)
+print(avg_monthly_sales)
+
+# Plot avg_monthly_sales by month
+plt.plot([1,2,3,4,5,6,7,8,9,10,11,12] , avg_monthly_sales , label="Average sales across industries")
+
+# Plot department store sales by month
+plt.plot([1 , 2 , 3 , 4 , 5 , 6 , 7 , 8 , 9 , 10 , 11 , 12] , monthly_sales[:,2] , label="Department store sales")
+plt.legend()
+plt.show()
+###############################
+# Find cumulative monthly sales for each industry
+cumulative_monthly_industry_sales = monthly_sales.cumsum(axis = 0)
+print(cumulative_monthly_industry_sales)
+#######################################
+# Find cumulative monthly sales for each industry
+cumulative_monthly_industry_sales = monthly_sales.cumsum(axis=0)
+print(cumulative_monthly_industry_sales)
+
+# Plot each industry's cumulative sales by month as separate lines
+plt.plot(np.arange(1, 13), cumulative_monthly_industry_sales[:,0], label="Liquor Stores")
+plt.plot(np.arange(1, 13), cumulative_monthly_industry_sales[:,1], label="Restaurants")
+plt.plot(np.arange(1, 13), cumulative_monthly_industry_sales[:,2], label="Department stores")
+plt.legend()
+plt.show()

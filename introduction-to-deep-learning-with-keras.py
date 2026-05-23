@@ -334,3 +334,30 @@ for size in training_sizes:
     
 # Plot train vs test accuracies
 plot_results(train_accs, test_accs)
+############################
+# Activation functions to try
+activations = ['relu', 'leaky_relu', 'sigmoid', 'tanh']
+
+# Loop over the activation functions
+activation_results = {}
+
+for act in activations:
+  # Get a new model with the current activation
+  model = get_model(act)
+  # Fit the model and store the history results
+  h_callback = model.fit(X_train , y_train , validation_data =(X_test , y_test) , epochs = 20 , verbose = 0)
+  activation_results[act] = h_callback
+#####################################
+# Create a dataframe from val_loss_per_function
+val_loss= pd.DataFrame(val_loss_per_function)
+
+# Call plot on the dataframe
+val_loss.plot()
+plt.show()
+
+# Create a dataframe from val_acc_per_function
+val_acc = pd.DataFrame(val_acc_per_function)
+
+# Call plot on the dataframe
+val_acc.plot()
+plt.show()

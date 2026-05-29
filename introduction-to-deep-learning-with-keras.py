@@ -361,3 +361,34 @@ val_acc = pd.DataFrame(val_acc_per_function)
 # Call plot on the dataframe
 val_acc.plot()
 plt.show()
+##############################################
+# Get a fresh new model with get_model
+model = get_model()
+
+# Train your model for 5 epochs with a batch size of 1
+model.fit(X_train, y_train, epochs=5, batch_size=1)
+print("\n The accuracy when using a batch of size 1 is: ",
+      model.evaluate(X_test, y_test)[1])
+################################
+model = get_model()
+
+# Fit your model for 5 epochs with a batch of size the training set
+model.fit(X_train, y_train, epochs=5, batch_size=y_train.shape[0])
+print("\n The accuracy when using the whole training set as batch-size was: ",
+      model.evaluate(X_test, y_test)[1])
+######################################
+# Import batch normalization from keras layers
+from tensorflow.keras.layers import BatchNormalization
+
+# Build your deep network
+batchnorm_model = Sequential()
+batchnorm_model.add(Dense(50, input_shape=(64,), activation='relu', kernel_initializer='normal'))
+batchnorm_model.add(BatchNormalization())
+batchnorm_model.add(Dense(50, activation='relu', kernel_initializer='normal'))
+batchnorm_model.add(BatchNormalization())
+batchnorm_model.add(Dense(50, activation='relu', kernel_initializer='normal'))
+batchnorm_model.add(BatchNormalization())
+batchnorm_model.add(Dense(10, activation='softmax', kernel_initializer='normal'))
+
+# Compile your model with sgd
+batchnorm_model.compile(optimizer='sgd', loss='categorical_crossentropy', metrics=['accuracy'])

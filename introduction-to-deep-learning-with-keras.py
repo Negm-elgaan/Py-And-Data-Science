@@ -392,3 +392,82 @@ batchnorm_model.add(Dense(10, activation='softmax', kernel_initializer='normal')
 
 # Compile your model with sgd
 batchnorm_model.compile(optimizer='sgd', loss='categorical_crossentropy', metrics=['accuracy'])
+##########################################
+# Train your standard model, storing its history callback
+h1_callback = standard_model.fit(X_train, y_train, validation_data=(X_test,y_test), epochs=10, verbose=0)
+
+# Train the batch normalized model you recently built, store its history callback
+h2_callback = batchnorm_model.fit(X_train , y_train , validation_data=(X_test , y_test), epochs=10, verbose=0)
+
+# Call compare_histories_acc passing in both model histories
+compare_histories_acc(h1_callback, h2_callback)
+###############################################
+# Creates a model given an activation and learning rate
+def create_model(learning_rate, activation):
+  
+  	# Create an Adam optimizer with the given learning rate
+  	opt = Adam(lr = learning_rate)
+  	
+  	# Create your binary classification model  
+  	model = Sequential()
+  	model.add(Dense(128, input_shape = (30,), activation = activation))
+  	model.add(Dense(256, activation = activation))
+  	model.add(Dense(1, activation = 'sigmoid'))
+  	
+  	# Compile your model with your optimizer, loss, and metrics
+  	model.compile(optimizer = opt, loss = 'binary_crossentropy', metrics = ['accuracy'])
+  	return model
+#########################
+# Import KerasClassifier from tensorflow.keras scikit learn wrappers
+from tensorflow.keras.wrappers.scikit_learn import KerasClassifier
+
+# Create a KerasClassifier
+model = KerasClassifier(build_fn = create_model)
+
+# Define the parameters to try out
+params = {'activation': ['relu', 'tanh'], 'batch_size': [32, 128, 256], 
+          'epochs': [50 , 100 , 200], 'learning_rate': [0.1, 0.01, 0.001]}
+
+# Create a randomize search cv object passing in the parameters to try
+random_search = RandomizedSearchCV(model , param_distributions = params , cv = KFold(3))
+
+# Running random_search.fit(X,y) would start the search,but it takes too long! 
+show_results()
+###############################
+# Import KerasClassifier from tensorflow.keras wrappers
+from tensorflow.keras.wrappers.scikit_learn import KerasClassifier
+
+# Create a KerasClassifier
+model = KerasClassifier(build_fn = create_model(learning_rate = 0.001, activation = 'relu'), epochs = 50, 
+             batch_size = 128, verbose = 0)
+
+# Calculate the accuracy score for each fold
+kfolds = cross_val_score(model , X , y , cv = 3)
+
+# Print the mean accuracy
+print('The mean accuracy was:', kfolds.mean())
+
+# Print the accuracy standard deviation
+print('With a standard deviation of:', kfolds.std())
+########################################
+# Build your encoder by using the first layer of your autoencoder
+encoder = Sequential()
+encoder.add(autoencoder.layers[0])
+
+# Encode the noisy images and show the encodings for your favorite number [0-9]
+encodings = encoder.predict(X_test_noise)
+show_encodings(encodings , number = 1)
+###################################################
+# Build your encoder by using the first layer of your autoencoder
+encoder = Sequential()
+encoder.add(autoencoder.layers[0])
+
+# Encode the noisy images and show the encodings for your favorite number [0-9]
+encodings = encoder.predict(X_test_noise)
+show_encodings(encodings, number = 1)
+
+# Predict on the noisy images with your autoencoder
+decoded_imgs = autoencoder.predict(X_test_noise)
+
+# Plot noisy vs decoded images
+compare_plot(X_test_noise, decoded_imgs)

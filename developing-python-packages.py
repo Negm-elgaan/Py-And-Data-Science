@@ -312,3 +312,70 @@ impyrial.weight.convert_unit(100, from_unit='oz', to_unit='lb')  # returns 6.25
 ########################
 python setup.py sdist bdist_wheel
 twine upload dist/*
+###########################
+repl:~/workspace/mypackages/impyrial$ mkdir tests
+repl:~/workspace/mypackages/impyrial$ cd tests
+repl:~/workspace/mypackages/impyrial/tests$ mkdir length
+repl:~/workspace/mypackages/impyrial/tests$ cd length
+repl:~/workspace/mypackages/impyrial/tests/length$ touch test_core.py
+repl:~/workspace/mypackages/impyrial/tests/length$ vim test_core.py
+from impyrial.length.core import inches_to_feet
+from impyrial.length.core import inches_to_yards
+#######################################
+from impyrial.length.core import inches_to_feet, inches_to_yards
+
+# Define tests for inches_to_feet function
+def test_inches_to_feet():
+	# Check that 12 inches is converted to 1.0 foot
+    assert (inches_to_feet(12) == 1.0) 
+    # Check that 2.5 feet is converted to 30.0 inches
+    assert (inches_to_feet(2.5, reverse=True) == 30.0)
+###########################
+"""Conversions between inches and larger imperial length units"""
+INCHES_PER_FOOT = 12.0  # 12.0 inches in a foot
+INCHES_PER_YARD = INCHES_PER_FOOT * 3.0  # 3 feet in a yard
+
+UNITS = ("in", "ft", "yd")
+
+
+def inches_to_feet(x, reverse=False):
+    """Convert lengths between inches and feet.
+    Parameters
+    ----------
+    x : array_like
+        Lengths in feet.
+    reverse : bool, optional
+        If this is set to true this function converts from feet to inches
+        instead of the default behaviour of inches to feet.
+    Returns
+    -------
+    ndarray
+        An array of converted lengths with the same shape as `x`. If `x` is a
+        0-d array, then a scalar is returned.
+    """
+    if reverse:
+        return x * INCHES_PER_FOOT
+    else:
+        return x / INCHES_PER_FOOT
+
+
+def inches_to_yards(x, reverse=False):
+    """Convert lengths between inches and yards.
+    Parameters
+    ----------
+    x : array_like
+        Lengths in feet.
+    reverse : bool, optional
+        If this is set to true this function converts from yards to inches
+        instead of the default behaviour of inches to yards.
+    Returns
+    -------
+    ndarray
+        An array of converted lengths with the same shape as `x`. If `x` is a
+        0-d array, then a scalar is returned.
+    """
+    if reverse:
+        return x * INCHES_PER_YARD
+    else:
+        return x / INCHES_PER_YARD
+pytest

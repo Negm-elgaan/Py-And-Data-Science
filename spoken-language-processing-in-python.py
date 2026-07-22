@@ -34,3 +34,28 @@ time_gm = np.linspace(start = 0 , stop = len(soundwave_gm) / framerate_gm , num 
 
 # Print the first 10 timestamps
 print(time_gm[:10])
+##################################
+# Setup the title and axis titles
+plt.title('Good Afternoon vs. Good ____')
+plt.ylabel('Amplitude')
+plt.xlabel('Time (seconds)')
+
+# Add the Good Afternoon data to the plot
+plt.plot(time_ga , soundwave_ga, label='Good Afternoon')
+
+# Add the Good Morning data to the plot
+plt.plot(time_gm , soundwave_gm, label='Good Morning',
+   # Set the alpha variable to 0.5
+   alpha=0.5)
+
+plt.legend()
+plt.show()
+##########################################################
+# Importing the speech_recognition library
+import speech_recognition as SR
+
+# Create an instance of the Recognizer class
+recognizer = SR.Recognizer() 
+
+# Set the energy threshold
+recognizer.energy_threshold = 300

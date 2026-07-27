@@ -247,3 +247,29 @@ plt.plot(np.arange(1, 13), cumulative_monthly_industry_sales[:,1], label="Restau
 plt.plot(np.arange(1, 13), cumulative_monthly_industry_sales[:,2], label="Department stores")
 plt.legend()
 plt.show()
+###########################
+# Create an array of tax collected by industry and month
+tax_collected = monthly_sales * 0.05
+print(tax_collected)
+#####################################
+# Create an array of tax collected by industry and month
+tax_collected = monthly_sales * 0.05
+print(tax_collected)
+
+# Create an array of sales revenue plus tax collected by industry and month
+total_tax_and_revenue = monthly_sales + tax_collected
+print(total_tax_and_revenue)
+############################
+# Create an array of monthly projected sales for all industries
+projected_monthly_sales = monthly_sales * monthly_industry_multipliers
+print(projected_monthly_sales)
+##################################################
+# Create an array of monthly projected sales for all industries
+projected_monthly_sales = monthly_sales * monthly_industry_multipliers
+print(projected_monthly_sales)
+
+# Graph current liquor store sales and projected liquor store sales by month
+plt.plot([1,2,3,4,5,6,7,8,9,10,11,12] , monthly_sales[:,0] , label="Current liquor store sales")
+plt.plot([1,2,3,4,5,6,7,8,9,10,11,12] , projected_monthly_sales[:,0] ,  label="Projected liquor store sales")
+plt.legend()
+plt.show()

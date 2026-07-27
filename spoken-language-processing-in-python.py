@@ -59,3 +59,13 @@ recognizer = SR.Recognizer()
 
 # Set the energy threshold
 recognizer.energy_threshold = 300
+#########################################
+# Create a recognizer class
+recognizer = sr.Recognizer()
+
+# Transcribe the support call audio
+text = recognizer.recognize_google(
+  audio_data=clean_support_call_audio, 
+  language="en-US")
+
+print(text)

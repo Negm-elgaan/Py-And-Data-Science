@@ -273,3 +273,10 @@ plt.plot([1,2,3,4,5,6,7,8,9,10,11,12] , monthly_sales[:,0] , label="Current liqu
 plt.plot([1,2,3,4,5,6,7,8,9,10,11,12] , projected_monthly_sales[:,0] ,  label="Projected liquor store sales")
 plt.legend()
 plt.show()
+####################################
+# Vectorize the .upper() string method
+vectorized_upper = np.vectorize(str.upper)
+
+# Apply vectorized_upper to the names array
+uppercase_names = vectorized_upper(names)
+print(uppercase_names)

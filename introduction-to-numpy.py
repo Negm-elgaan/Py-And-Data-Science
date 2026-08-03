@@ -280,3 +280,34 @@ vectorized_upper = np.vectorize(str.upper)
 # Apply vectorized_upper to the names array
 uppercase_names = vectorized_upper(names)
 print(uppercase_names)
+##############################################
+# Convert monthly_growth_rate into a NumPy array
+monthly_growth_1D = np.array(monthly_growth_rate)
+
+# Reshape monthly_growth_1D
+monthly_growth_2D = monthly_growth_1D.reshape((12,1))
+
+# Multiply each column in monthly_sales by monthly_growth_2D
+print(monthly_growth_2D * monthly_sales)
+##############################################################
+# Find the mean sales projection multiplier for each industry
+mean_multipliers = monthly_industry_multipliers.mean(axis = 0)
+print(mean_multipliers)
+#######################################
+# Find the mean sales projection multiplier for each industry
+mean_multipliers = monthly_industry_multipliers.mean(axis=0)
+print(mean_multipliers)
+
+# Print the shapes of mean_multipliers and monthly_sales
+print(mean_multipliers.shape , monthly_sales.shape)
+###########################################
+# Find the mean sales projection multiplier for each industry
+mean_multipliers = monthly_industry_multipliers.mean(axis=0)
+print(mean_multipliers)
+
+# Print the shapes of mean_multipliers and monthly_sales
+print(mean_multipliers.shape, monthly_sales.shape)
+
+# Multiply each value by the multiplier for that industry
+projected_sales = monthly_sales * mean_multipliers
+print(projected_sales)

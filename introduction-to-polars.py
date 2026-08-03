@@ -16,3 +16,12 @@ print(ev_df.schema)
 ###########################
 # Print the first values in a vertical format
 print(ev_df.glimpse())
+#################################
+# Create a Series from the brand column
+print(ev_df['brand'])
+####################################
+# Extract the brand, model and price columns
+print(ev_df[['brand' , 'model' , 'price']])
+###############################################
+# Print the last three rows of the brand and price columns
+print(ev_df[-3 : , ['brand' , 'price']])

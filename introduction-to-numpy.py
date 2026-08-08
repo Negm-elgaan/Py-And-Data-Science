@@ -311,3 +311,9 @@ print(mean_multipliers.shape, monthly_sales.shape)
 # Multiply each value by the multiplier for that industry
 projected_sales = monthly_sales * mean_multipliers
 print(projected_sales)
+##########################################
+# Load the mystery_image.npy file 
+rgb_array = np.load("mystery_image.npy")
+
+plt.imshow(rgb_array)
+plt.show()

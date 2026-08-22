@@ -49,3 +49,35 @@ print(expensive_df)
 cheap_df = ev_df.bottom_k(4  ,  by = "price")
 
 print(cheap_df)
+########################################################
+# Select the brand, model and rounded accel columns
+print(ev_df.select("brand" , "model" , pl.col("accel").round(0)))
+#######################
+# Print the max of the price and mean of the range
+print(ev_df.select(pl.col("price").max() , pl.col("range").mean()))
+#############################################################################################################
+# There are 1.609 kilometers in a mile
+MILES_TO_KILOMETERS = 1.609
+
+# Select the columns with range converted to miles
+range_df = ev_df.select("brand", "model", pl.col("range") / MILES_TO_KILOMETERS)
+
+print(range_df)
+##########################
+# There are 1.609 kilometers in a mile
+MILES_TO_KILOMETERS = 1.609
+
+# Round the expression to one decimal place
+range_df = ev_df.select("brand", "model", (pl.col("range") / MILES_TO_KILOMETERS).round(1))
+
+# Print range_df
+print(range_df)
+#############################
+# There are 1.609 kilometers in a mile
+MILES_TO_KILOMETERS = 1.609
+
+# Rename the expression output
+range_df = ev_df.select("brand", "model", (pl.col("range") / MILES_TO_KILOMETERS).round(1).alias("range_miles"))
+
+# Print range_df
+print(range_df)

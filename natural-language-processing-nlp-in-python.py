@@ -69,3 +69,23 @@ lemmatizer = WordNetLemmatizer()
 lemmatized_tokens = [lemmatizer.lemmatize(word) for word in clean_tokens]
 
 print(lemmatized_tokens)
+###############################
+reviews = [
+    "The product is fantastic! It works like a charm.",
+    "I hated the product. It broke after one use.",
+    "Product was okay, not the best, but fine overall."
+]
+# Preprocess the reviews
+cleaned_reviews = [preprocess(review) for review in reviews]
+
+vectorizer = CountVectorizer()
+# Fit the vectorizer
+vectorizer.fit(cleaned_reviews)
+# Print the vocabulary 
+print(vectorizer.get_feature_names_out())
+#############################################
+# Transform the reviews
+bow_matrix = vectorizer.transform(cleaned_reviews)
+
+# Print the BoW representation
+print(bow_matrix.toarray())

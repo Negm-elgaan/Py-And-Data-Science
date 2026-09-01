@@ -157,3 +157,46 @@ df = pd.DataFrame(
   columns=vectorizer.get_feature_names_out()
 )
 print(df.head())
+#####################
+# Convert BoW matrix to a DataFrame
+df_bow = pd.DataFrame(
+    bow_matrix.toarray(),
+    columns=vectorizer.get_feature_names_out()
+)
+
+# Plot the heatmap
+plt.figure(figsize=(10, 6))
+sns.heatmap(df_bow, annot=True)
+plt.title("BoW Scores Across Reviews")
+plt.xlabel("Terms")
+plt.xticks(rotation=45)
+plt.ylabel("Documents")
+plt.show()
+###################################
+# Convert TF-IDF matrix to a DataFrame
+df_tfidf = pd.DataFrame(
+    tfidf_matrix.toarray(),
+    columns=vectorizer.get_feature_names_out()
+)
+
+# Plot the heatmap
+plt.figure(figsize=(10, 6))
+sns.heatmap(df_tfidf, annot=True)
+plt.title("TF-IDF Scores Across Reviews")
+plt.xlabel("Terms")
+plt.xticks(rotation=45)
+plt.ylabel("Documents")
+plt.show()
+#############################################
+import gensim.downloader as API
+
+Model = API.load("glove-wiki-gigaword-100")
+# Compute similarity between "king" and "queen"
+similarity_score = model_glove_wiki.similarity("king" , "queen")
+
+print(similarity_score)
+
+# Get top 10 most similar words to "computer"
+similar_words = model_glove_wiki.most_similar("computer" , topn = 10)
+
+print(similar_words)

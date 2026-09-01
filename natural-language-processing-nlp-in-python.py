@@ -89,3 +89,71 @@ bow_matrix = vectorizer.transform(cleaned_reviews)
 
 # Print the BoW representation
 print(bow_matrix.toarray())
+########################################################
+def preprocess(text):
+    text = text.lower()
+    tokens = word_tokenize(text)
+    tokens = [word for word in tokens if word not in string.punctuation]
+    return " ".join(tokens)
+  
+cleaned_reviews = [preprocess(review) for review in product_reviews]
+X = vectorizer.fit_transform(cleaned_reviews)
+
+# Get word counts
+word_counts = np.sum(X.toarray() , axis = 0)
+# Get words
+words = vectorizer.get_feature_names_out()
+
+top_words_with_stopwords, top_counts_with_stopwords = get_top_ten(words, word_counts)
+print(top_words_with_stopwords, top_counts_with_stopwords)
+################################
+# Modify the function to remove stop words 
+def preprocess(text):
+    text = text.lower()
+    tokens = word_tokenize(text)
+    tokens = [word for word in tokens if word not in string.punctuation]
+    tokens = [word for word in tokens if word not in stop_words]
+    return " ".join(tokens)
+  
+cleaned_reviews = [preprocess(review) for review in product_reviews]
+X = vectorizer.fit_transform(cleaned_reviews)
+
+# Get word counts
+word_counts = np.sum(X.toarray(), axis=0)
+# Get words
+words = vectorizer.get_feature_names_out()
+
+top_words_without_stopwords, top_counts_without_stopwords = get_top_ten(words, word_counts)
+print(top_words_without_stopwords, top_counts_without_stopwords)
+################
+import matplotlib.pyplot as plt
+# Plot the frequencies with stop words
+plt.bar(top_words_with_stopwords , top_counts_with_stopwords)
+plt.title("Top 10 word frequencies (with stop words)")
+plt.xlabel("Words")
+plt.ylabel("Frequency")
+plt.show()
+
+# Plot the frequencies without stop words
+plt.figure()
+plt.bar(top_words_without_stopwords, top_counts_without_stopwords)
+plt.title("Top 10 word frequencies (without stop words)")
+plt.xlabel("Words")
+plt.ylabel("Frequency")
+plt.show()
+#################################
+reviews = ["The smart speaker is incredible. Clear sound and fast responses!",
+           "I am disappointed with the smart bulb. It stopped working in a week.",
+           "The thermostat is okay. Not too smart, but functional."]
+cleaned_reviews = [preprocess(review) for review in reviews]
+
+# Initialize the vectorizer
+vectorizer = TfidfVectorizer()
+# Transform the cleaned reviews
+tfidf_matrix = vectorizer.fit_transform(cleaned_reviews)
+# Create a DataFrame for TF-IDF
+df = pd.DataFrame(
+  tfidf_matrix.toarray(),
+  columns=vectorizer.get_feature_names_out()
+)
+print(df.head())

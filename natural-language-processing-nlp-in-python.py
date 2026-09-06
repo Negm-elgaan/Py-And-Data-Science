@@ -200,3 +200,45 @@ print(similarity_score)
 similar_words = model_glove_wiki.most_similar("computer" , topn = 10)
 
 print(similar_words)
+################################
+words = ["lion", "tiger", "leopard", "banana", "strawberry", "truck", "car", "bus"]
+
+# Extract word embeddings
+word_vectors = [model_glove_wiki[word] for word in words]
+
+# Reduce dimensions with PCA
+pca = PCA(n_components=2)
+word_vectors_2d = pca.fit_transform(word_vectors)
+
+plt.scatter(word_vectors_2d[:, 0], word_vectors_2d[:, 1])
+for word, (x, y) in zip(words, word_vectors_2d):
+    plt.annotate(word, (x, y))
+plt.title("GloVe Wikipedia Word Embeddings (2D PCA)")
+plt.show()
+############################################
+words = ["lion", "tiger", "leopard", "banana", "strawberry", "truck", "car", "bus"]
+
+# Change the embedding model
+word_vectors = [model_glove_twitter[word] for word in words]
+
+# Reduce dimensions with PCA
+pca = PCA(n_components=2)
+word_vectors_2d = pca.fit_transform(word_vectors)
+
+plt.scatter(word_vectors_2d[:, 0], word_vectors_2d[:, 1])
+for word, (x, y) in zip(words, word_vectors_2d):
+    plt.annotate(word, (x, y))
+plt.title("GloVe Twitter Word Embeddings (2D PCA)")
+plt.show()
+############################
+from transformers import pipeline as pl
+
+# Define the sentiment analysis pipeline
+classifier = pl(task = "sentiment-analysis" , model = "distilbert-base-uncased-finetuned-sst-2-english")
+
+review_text = "The new update made the app much faster and easier to use!"
+
+# Get sentiment prediction
+result = classifier(review_text)
+
+print(result)

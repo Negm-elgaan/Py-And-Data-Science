@@ -242,3 +242,59 @@ review_text = "The new update made the app much faster and easier to use!"
 result = classifier(review_text)
 
 print(result)
+######################################
+from transformers import pipeline
+
+classifier = pipeline(task="sentiment-analysis", model="distilbert-base-uncased-finetuned-sst-2-english")
+
+review_batch = [
+    "Absolutely love the new design!",
+    "The app crashes every time I open it.",
+    "Customer support was helpful and quick.",
+    "Too many ads make it unusable.",
+    "Everything works fine, but it’s a bit slow."
+]
+
+# Classify sentiments
+results = classifier(review_batch)
+print(results)
+##############################################
+from transformers import pipeline
+from sklearn.metrics import accuracy_score
+# Load sentiment analysis models
+pipe_a = pipeline(task="sentiment-analysis", model = "distilbert-base-uncased-finetuned-sst-2-english")
+pipe_b = pipeline(task="sentiment-analysis", model = "abilfad/sentiment-binary-dicoding")
+
+# Generate predictions
+preds_a = [res['label'] for res in pipe_a(texts)]
+preds_b = [res['label'] for res in pipe_b(texts)]
+##########################################################
+from transformers import pipeline
+from sklearn.metrics import accuracy_score
+# Load sentiment analysis models
+pipe_a = pipeline(task="sentiment-analysis", model="distilbert-base-uncased-finetuned-sst-2-english")
+pipe_b = pipeline(task="sentiment-analysis", model="abilfad/sentiment-binary-dicoding")
+
+# Generate predictions
+preds_a = [res["label"] for res in pipe_a(texts)]
+preds_b = [res["label"] for res in pipe_b(texts)]
+
+# Evaluate accuracies
+acc_a = accuracy_score(preds_a , true_labels)
+acc_b = accuracy_score(preds_b , true_labels)
+print(f"Accuracy - Model A: {acc_a:.2f}")
+print(f"Accuracy - Model B: {acc_b:.2f}")
+##################################################################
+from transformers import pipeline
+
+# Initialize the zero-shot classifier
+classifier = pipeline(task = "zero-shot-classification" , model = "MoritzLaurer/DeBERTa-v3-base-mnli-fever-anli")
+
+ticket_text = "I was charged twice for my subscription this month. Can you please refund the extra charge?"
+candidate_labels = ["Billing", "Technical Issue", "Account Access"]
+
+# Classify the ticket
+result = classifier(ticket_text , candidate_labels)
+
+print(result['labels'])
+print(result['scores'])

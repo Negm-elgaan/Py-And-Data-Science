@@ -298,3 +298,47 @@ result = classifier(ticket_text , candidate_labels)
 
 print(result['labels'])
 print(result['scores'])
+####################################
+from transformers import pipeline
+
+# Initialize the QNLI pipeline
+classifier = pipeline(model = "cross-encoder/qnli-electra-base" , task = "text-classification")
+
+passage = "Our refund policy allows customers to return any item within 30 days of purchase, provided the item is in its original condition and accompanied by the receipt. Refunds are issued to the original payment method within 5–7 business days."
+question = "Can I get a refund if I return a product after 20 days?"
+
+# Get the result
+result = classifier({"text" : question , "text_pair": passage})
+print(result)
+###########################################
+from transformers import pipeline
+
+# Initialize the pipeline
+classifier = pipeline(task="text-classification", model="textattack/bert-base-uncased-QQP")
+
+question_1 = "What's the process to change my password?"
+question_2 = "How do I reset my account password?"
+
+# Detect if the two questions are paraphrases
+result = classifier({
+    "text": question_1,
+    "text_pair": question_2
+})
+
+print(result)
+###################################
+from transformers import pipeline
+
+# Initialize the pipeline
+classifier = pipeline(task="text-classification", model="textattack/distilbert-base-uncased-QQP")
+
+question_1 = "What's the process to change my password?"
+question_2 = "How do I reset my account password?"
+
+# Detect if the two questions are paraphrases
+result = classifier({
+    "text": question_1,
+    "text_pair": question_2
+})
+
+print(result)

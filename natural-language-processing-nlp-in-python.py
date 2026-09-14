@@ -342,3 +342,113 @@ result = classifier({
 })
 
 print(result)
+###################################################
+from transformers import pipeline
+
+# Initialize the pipeline
+classifier = pipeline(task = "text-classification" , model = "textattack/bert-base-uncased-CoLA")
+
+user_text = "Although she was knowing the answer, she didn't raised her hand during the class discussion."
+
+# Classify grammatical acceptability
+result = classifier(user_text)
+
+print(result)
+###########################
+from transformers import pipeline
+# Create the NER pipeline
+ner_pipeline = pipeline(
+    task="ner",
+    model="dslim/bert-base-NER",
+    grouped_entities=True
+)
+headline = "Apple is planning to open a new office in San Francisco next year."
+
+# Get named entities
+entities = ner_pipeline(headline)
+
+for entity in entities:
+    print(f"{entity['entity_group']}: {entity['word']}")
+######################################
+from transformers import pipeline
+# Create the PoS tagging pipeline
+pos_pipeline = pipeline(
+    task="token-classification",
+    model="vblagoje/bert-english-uncased-finetuned-pos",
+    grouped_entities=True
+)
+
+sentence = "I am meeting my friends for coffee this afternoon."
+
+# Get PoS tags
+pos_tags = pos_pipeline(sentence)
+for token in pos_tags:
+    print(f"{token['word']}: {token['entity_group']}")
+################################################
+from transformers import pipeline
+
+# Create the question-answering pipeline
+qa_pipeline = pipeline(
+    task="question-answering",
+    model="distilbert/distilbert-base-cased-distilled-squad"
+)
+
+context = """This smartphone features a 6.5-inch OLED display, 128GB of storage, and a 48MP camera with night mode. It supports 5G connectivity and has a battery life of up to 24 hours."""
+
+question = "What is the size of the smartphone's display?"
+
+# Get the answer
+result = qa_pipeline(question , context)
+print(result)
+##################################################################################################
+from transformers import pipeline
+
+# Create the abstractive question-answering pipeline
+qa_pipeline = pipeline(
+    task="text2text-generation",
+    model="fangyuan/hotpotqa_abstractive"
+)
+
+context = """This smartphone features a 6.5-inch OLED display, 128GB of storage, and a 48MP camera with night mode. It supports 5G connectivity and has a battery life of up to 24 hours."""
+
+question = "What is the size of the smartphone's display?"
+
+# Generate abstractive answer
+result = qa_pipeline(f"question: {question} context: {context}")
+print(result)
+####################################
+from transformers import pipeline
+
+# Create the summarization pipeline
+summarizer = pipeline(task="summarization", model="cnicu/t5-small-booksum")
+
+article = """NASA's Perseverance rover has successfully collected its first rock samples from Mars, marking a significant milestone in the mission. The samples will be stored for potential return to Earth in the future, providing valuable insight into the planet's geology and potential signs of past microbial life."""
+
+# Generate the summary
+summary = summarizer(article)
+
+print(summary)
+##############
+from transformers import pipeline
+
+# Create the translation pipeline
+translator = pipeline(task="translation", model="Helsinki-NLP/opus-mt-en-fr")
+
+review = "The hotel was clean and the staff were very friendly."
+
+# Translate the review
+translation = translator(review)
+
+print(translation)
+################################################################
+from transformers import pipeline
+
+# Create the translation pipeline
+translator = pipeline(task="translation", model="Helsinki-NLP/opus-mt-en-fr")
+
+review = "The hotel was clean and the staff were very friendly."
+
+# Translate the review
+translation = translator(review)
+
+print(translation)

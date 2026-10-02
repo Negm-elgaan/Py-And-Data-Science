@@ -43,3 +43,34 @@ blob_titanic = TB(titanic)
 
 # Print out its sentiment  
 print(blob_titanic.sentiment)
+################################
+from wordcloud import WordCloud as WC
+
+# Generate the word cloud from the east_of_eden string
+cloud_east_of_eden = WC(background_color="white").generate(east_of_eden)
+#####################################
+# Generate the word cloud from the east_of_eden string
+cloud_east_of_eden = WordCloud(background_color="white").generate(east_of_eden)
+
+# Create a figure of the generated cloud
+plt.imshow(cloud_east_of_eden, interpolation='bilinear')  
+plt.axis('off')
+# Display the figure
+plt.show()
+################################################
+cloud = WordCloud(background_color = "orange").generate(illuminated)
+plt.imshow(cloud , interpolation = 'bilinear')
+plt.show()
+####################################
+# Import the word cloud function  
+from wordcloud import WordCloud as WC
+
+# Create and generate a word cloud image 
+my_cloud = WC(background_color = 'white' , stopwords =my_stopwords).generate(descriptions)
+
+# Display the generated wordcloud image
+plt.imshow(my_cloud, interpolation='bilinear') 
+plt.axis("off")
+
+# Don't forget to show the final image
+plt.show()

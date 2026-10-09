@@ -74,3 +74,32 @@ plt.axis("off")
 
 # Don't forget to show the final image
 plt.show()
+#############################################
+# Import the required function
+from sklearn.feature_extraction.text import CountVectorizer as CV
+
+annak = ['Happy families are all alike;', 'every unhappy family is unhappy in its own way']
+
+# Build the vectorizer and fit it
+anna_vect = CV()
+anna_vect.fit(annak)
+
+# Create the bow representation
+anna_bow = anna_vect.transform(annak)
+
+# Print the bag-of-words result 
+print(anna_bow.toarray())
+###################
+from sklearn.feature_extraction.text import CountVectorizer 
+
+# Build the vectorizer, specify max features 
+vect = CountVectorizer(max_features=100)
+# Fit the vectorizer
+vect.fit(reviews.review)
+
+# Transform the review column
+X_review = vect.transform(reviews.review)
+
+# Create the bow representation
+X_df=pd.DataFrame(X_review.toarray(), columns=vect.get_feature_names())
+print(X_df.head())

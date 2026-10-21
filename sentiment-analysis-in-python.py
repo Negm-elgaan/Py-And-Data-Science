@@ -152,3 +152,31 @@ X_review = vect.transform(movies.review)
 # Create the bow representation
 X_df = pd.DataFrame(X_review.toarray(), columns=vect.get_feature_names())
 print(X_df.head())
+###########################################################
+#Import the vectorizer
+from sklearn.feature_extraction.text import CountVectorizer as CV
+
+# Build the vectorizer, specify max features and fit
+vect = CV(max_features=1000, ngram_range=(2, 2), max_df=500)
+vect.fit(reviews.review)
+
+# Transform the review
+X_review = vect.transform(reviews.review)
+
+# Create a DataFrame from the bow representation
+X_df = pd.DataFrame(X_review.toarray(), columns=vect.get_feature_names())
+print(X_df.head())
+################################
+# Import the required function
+from nltk import word_tokenize as WT
+
+# Transform the GoT string to word tokens
+print(WT(GoT))
+#################################################
+# Import the word tokenizing function
+from nltk import word_tokenize
+
+# Tokenize each item in the avengers 
+tokens_avengers = [word_tokenize(item) for item in avengers]
+
+print(tokens_avengers)

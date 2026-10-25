@@ -179,3 +179,34 @@ embedding = nn.Embedding(num_embeddings=len(words), embedding_dim=10)
 # Pass the tensor to the embedding layer
 output = embedding(inputs)
 print(output)
+#################################################
+class TextClassificationCNN(nn.Module):
+    def __init__(self, vocab_size, embed_dim):
+        super(TextClassificationCNN, self).__init__()
+        # Initialize the embedding layer 
+        self.embedding = nn.Embedding(vocab_size, embed_dim)
+        self.conv = nn.Conv1d(embed_dim, embed_dim, kernel_size=3, stride=1, padding=1)
+        self.fc = nn.Linear(embed_dim, 2)
+    def forward(self, text):
+        embedded = self.embedding(text).permute(0, 2, 1)
+        # Pass the embedded text through the convolutional layer and apply a ReLU
+        conved = F.relu(self.conv(embedded))
+        conved = conved.mean(dim=2) 
+        return self.fc(conved)
+#######################
+# Define the loss function
+criterion = nn.CrossEntropyLoss()
+optimizer = optim.SGD(model.parameters(), lr=0.1)
+
+for epoch in range(10):
+    for sentence, label in data:     
+        # Clear the gradients
+        model.zero_grad()
+        sentence = torch.LongTensor([word_to_ix.get(w, 0) for w in sentence]).unsqueeze(0) 
+        label = torch.LongTensor([int(label)])
+        outputs = model(sentence)
+        loss = criterion(outputs, label)
+        loss.backward()
+        # Update the parameters
+        optimizer.step()
+print('Training complete!')

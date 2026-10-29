@@ -199,3 +199,19 @@ for i in range(len(word_tokens)):
 
 # Create a new feature for the lengh of each review
 reviews['n_words'] = len_tokens 
+###############################
+# Import the language detection function and package
+from langdetect import detect_langs
+
+# Detect the language of the foreign string
+print(detect_langs(foreign))
+#################################################################
+from langdetect import detect_langs
+
+languages = []
+
+# Loop over the sentences in the list and detect their language
+for sentence in sentences:
+    languages.append(detect_langs(sentence))
+    
+print('The detected languages are: ', languages)
